@@ -1,0 +1,22 @@
+# Dependencies
+node_modules/
+
+# Build output
+dist/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Cloudflare
+.wrangler/
+
+# Supabase local dev
+.supabase/
+
+# OS
+.DS_Store
+
+# Claude Code local-only state
+.claude/settings.local.json
