@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['apple-touch-icon.png'],
       manifest: {
-        name: 'Asadarg',
-        short_name: 'Asadarg',
+        name: 'AsadARG',
+        short_name: 'AsadARG',
         description: 'Contabilizá y repartí los gastos de tus asados con amigos.',
         theme_color: '#236391',
         background_color: '#f9f9ff',

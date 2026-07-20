@@ -1,4 +1,4 @@
-// Tipos de dominio de Asadarg — ver specs/001-asadarg-mvp/data-model.md
+// Tipos de dominio de AsadARG — ver specs/001-asadarg-mvp/data-model.md
 
 export interface Perfil {
   id: string;
