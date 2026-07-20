@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: 'AsadARG',
         short_name: 'AsadARG',
-        description: 'Contabilizá y repartí los gastos de tus asados con amigos.',
+        description: 'A comer, hijo de puta!',
         theme_color: '#236391',
         background_color: '#f9f9ff',
         display: 'standalone',

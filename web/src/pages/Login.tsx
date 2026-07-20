@@ -20,7 +20,7 @@ export function Login() {
       </div>
       <button
         onClick={() => loginConGoogle()}
-        className="w-full max-w-xs rounded-full bg-secondary-container px-6 py-4 font-display text-sm font-bold uppercase tracking-widest text-on-secondary-container shadow-[0px_8px_24px_rgba(116,172,223,0.25)] transition-transform active:scale-95"
+        className="w-full max-w-[320px] rounded-full bg-secondary-container px-6 py-4 font-display text-sm font-bold uppercase tracking-widest text-on-secondary-container shadow-[0px_8px_24px_rgba(116,172,223,0.25)] transition-transform active:scale-95"
       >
         Logueate
       </button>
