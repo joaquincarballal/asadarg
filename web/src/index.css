@@ -1,0 +1,81 @@
+@import 'tailwindcss';
+
+/*
+  Design system trasladado de specs/001-asadarg-mvp/design/asadarg_design_system/DESIGN.md
+  (export de Google Stitch, adoptado como fuente de verdad de UI — ver research.md §8).
+*/
+@theme {
+  --color-surface: #f9f9ff;
+  --color-surface-dim: #cfdaf2;
+  --color-surface-bright: #f9f9ff;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f0f3ff;
+  --color-surface-container: #e7eeff;
+  --color-surface-container-high: #dee8ff;
+  --color-surface-container-highest: #d8e3fb;
+  --color-on-surface: #111c2d;
+  --color-on-surface-variant: #41474f;
+  --color-inverse-surface: #263143;
+  --color-inverse-on-surface: #ecf1ff;
+  --color-outline: #717880;
+  --color-outline-variant: #c1c7d0;
+  --color-surface-tint: #236391;
+  --color-primary: #236391;
+  --color-on-primary: #ffffff;
+  --color-primary-container: #74acdf;
+  --color-on-primary-container: #003f65;
+  --color-inverse-primary: #96ccff;
+  --color-secondary: #7b5800;
+  --color-on-secondary: #ffffff;
+  --color-secondary-container: #febb1b;
+  --color-on-secondary-container: #6c4d00;
+  --color-tertiary: #825502;
+  --color-on-tertiary: #ffffff;
+  --color-tertiary-container: #d59c4a;
+  --color-on-tertiary-container: #553600;
+  --color-error: #ba1a1a;
+  --color-on-error: #ffffff;
+  --color-error-container: #ffdad6;
+  --color-on-error-container: #93000a;
+  --color-background: #f9f9ff;
+  --color-on-background: #111c2d;
+
+  --font-display: 'Montserrat', sans-serif;
+  --font-body: 'Be Vietnam Pro', sans-serif;
+
+  --radius-sm: 0.5rem;
+  --radius-md: 1.5rem;
+  --radius-lg: 2rem;
+  --radius-xl: 3rem;
+
+  --spacing-container-padding: 20px;
+  --spacing-stack-gap: 12px;
+}
+
+body {
+  @apply bg-background text-on-background font-body m-0;
+  min-height: 100dvh;
+}
+
+#root {
+  min-height: 100dvh;
+}
+
+.hide-scrollbar::-webkit-scrollbar {
+  display: none;
+}
+.hide-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+.material-symbols-outlined {
+  font-variation-settings:
+    'FILL' 0,
+    'wght' 400,
+    'GRAD' 0,
+    'opsz' 24;
+}
+.icon-fill {
+  font-variation-settings: 'FILL' 1;
+}

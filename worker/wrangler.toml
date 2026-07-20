@@ -1,0 +1,12 @@
+name = "asadarg-keepalive"
+main = "src/index.ts"
+compatibility_date = "2026-01-01"
+
+# Ping cada 3 días (no exactamente semanal): Supabase pausa proyectos free tier tras
+# 7 días sin actividad de DB — ver specs/001-asadarg-mvp/research.md §2 para el porqué.
+[triggers]
+crons = ["0 12 */3 * *"]
+
+# SUPABASE_URL y SUPABASE_ANON_KEY se configuran como secrets, no acá:
+#   wrangler secret put SUPABASE_URL
+#   wrangler secret put SUPABASE_ANON_KEY

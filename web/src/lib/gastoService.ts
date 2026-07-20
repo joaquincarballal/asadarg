@@ -1,0 +1,181 @@
+import { supabase } from './supabase';
+import { obtenerCotizacionBlue } from './dolarapi';
+import type { CategoriaGasto } from '../types';
+import type { DivisionParticipante } from './splitting';
+import type { Balance } from './settlements';
+
+export interface CrearGastoInput {
+  eventoId: string;
+  categoria: CategoriaGasto;
+  corteId?: string | null;
+  kilogramos?: number | null;
+  concepto?: string | null;
+  montoArs: number;
+  pagadorId: string;
+  division: DivisionParticipante[];
+}
+
+/** Guarda un gasto capturando la cotización USD del día (FR-012) y el precio/kg si es
+ * carne (FR-013). Si dolarapi.com no responde, el gasto se guarda igual (FR-020). */
+export async function crearGasto(input: CrearGastoInput) {
+  const { data: userData } = await supabase.auth.getUser();
+  const cargadoPorId = userData.user?.id;
+  if (!cargadoPorId) throw new Error('No hay sesión activa.');
+
+  const cotizacion = await obtenerCotizacionBlue();
+  const cotizacionVenta = cotizacion?.venta ?? null;
+  const montoUsd = cotizacionVenta ? input.montoArs / cotizacionVenta : null;
+  const precioPorKg =
+    input.categoria === 'carne' && input.kilogramos ? input.montoArs / input.kilogramos : null;
+
+  const { data: gasto, error } = await supabase
+    .from('gasto')
+    .insert({
+      evento_id: input.eventoId,
+      categoria: input.categoria,
+      corte_id: input.corteId ?? null,
+      kilogramos: input.kilogramos ?? null,
+      concepto: input.concepto ?? null,
+      monto_ars: input.montoArs,
+      cotizacion_usd_venta: cotizacionVenta,
+      monto_usd: montoUsd,
+      precio_por_kg: precioPorKg,
+      pagador_id: input.pagadorId,
+      cargado_por_id: cargadoPorId,
+    })
+    .select()
+    .single();
+
+  if (error) throw error;
+
+  const filas = input.division.map((d) => ({
+    gasto_id: gasto.id,
+    participante_id: d.participanteId,
+    proporcion: d.proporcion,
+  }));
+  const { error: divisionError } = await supabase.from('gasto_participante').insert(filas);
+  if (divisionError) throw divisionError;
+
+  return gasto;
+}
+
+export async function listarGastos(eventoId: string) {
+  const { data, error } = await supabase
+    .from('gasto')
+    .select('*')
+    .eq('evento_id', eventoId)
+    .order('created_at', { ascending: false });
+  if (error) throw error;
+  return data ?? [];
+}
+
+/** Edita monto y (para carne) kilos de un gasto existente, recalculando precio/kg
+ * y el equivalente USD con la cotización ya guardada (FR-007). */
+export async function actualizarGasto(
+  gastoId: string,
+  cambios: { montoArs: number; kilogramos?: number | null },
+) {
+  const { data: actual, error: fetchError } = await supabase
+    .from('gasto')
+    .select('cotizacion_usd_venta, categoria')
+    .eq('id', gastoId)
+    .single();
+  if (fetchError) throw fetchError;
+
+  const montoUsd = actual.cotizacion_usd_venta
+    ? cambios.montoArs / actual.cotizacion_usd_venta
+    : null;
+  const precioPorKg =
+    actual.categoria === 'carne' && cambios.kilogramos
+      ? cambios.montoArs / cambios.kilogramos
+      : null;
+
+  const { error } = await supabase
+    .from('gasto')
+    .update({
+      monto_ars: cambios.montoArs,
+      monto_usd: montoUsd,
+      kilogramos: cambios.kilogramos ?? null,
+      precio_por_kg: precioPorKg,
+    })
+    .eq('id', gastoId);
+  if (error) throw error;
+}
+
+export async function eliminarGasto(gastoId: string) {
+  const { error } = await supabase.from('gasto').delete().eq('id', gastoId);
+  if (error) throw error;
+}
+
+export async function listarCortesCarne() {
+  const { data, error } = await supabase.from('corte_carne').select('*').order('nombre');
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function listarConceptosSugeridos() {
+  const { data, error } = await supabase
+    .from('concepto_extra_sugerido')
+    .select('*')
+    .order('nombre');
+  if (error) throw error;
+  return data ?? [];
+}
+
+export async function agregarCorteCarne(nombre: string) {
+  const { data, error } = await supabase.from('corte_carne').insert({ nombre }).select().single();
+  if (error) throw error;
+  return data;
+}
+
+/** Balance en vivo (pagado - corresponde) por participante — mismo cálculo que usa
+ * `cerrar_evento` en SQL (ver supabase/migrations/0003_cerrar_evento_rpc.sql), acá en
+ * el cliente para poder mostrarlo antes de cerrar el evento. */
+export async function calcularBalancesEvento(
+  eventoId: string,
+  participanteIds: string[],
+): Promise<Balance[]> {
+  const { data: gastos, error: gastosError } = await supabase
+    .from('gasto')
+    .select('id, monto_ars, pagador_id')
+    .eq('evento_id', eventoId);
+  if (gastosError) throw gastosError;
+
+  const gastoIds = (gastos ?? []).map((g) => g.id);
+  const { data: divisiones, error: divisionesError } =
+    gastoIds.length > 0
+      ? await supabase
+          .from('gasto_participante')
+          .select('gasto_id, participante_id, proporcion')
+          .in('gasto_id', gastoIds)
+      : {
+          data: [] as { gasto_id: string; participante_id: string; proporcion: number }[],
+          error: null,
+        };
+  if (divisionesError) throw divisionesError;
+
+  const montoPorGasto = new Map((gastos ?? []).map((g) => [g.id, g.monto_ars]));
+
+  const pagadoPorParticipante = new Map<string, number>();
+  for (const g of gastos ?? []) {
+    pagadoPorParticipante.set(
+      g.pagador_id,
+      (pagadoPorParticipante.get(g.pagador_id) ?? 0) + g.monto_ars,
+    );
+  }
+
+  const correspondePorParticipante = new Map<string, number>();
+  for (const d of divisiones ?? []) {
+    const monto = montoPorGasto.get(d.gasto_id) ?? 0;
+    const share = monto * d.proporcion;
+    correspondePorParticipante.set(
+      d.participante_id,
+      (correspondePorParticipante.get(d.participante_id) ?? 0) + share,
+    );
+  }
+
+  return participanteIds.map((id) => ({
+    participanteId: id,
+    balance: (pagadoPorParticipante.get(id) ?? 0) - (correspondePorParticipante.get(id) ?? 0),
+  }));
+}
