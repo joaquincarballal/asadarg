@@ -100,7 +100,41 @@ exactamente lo que pide la constitución (Stack Fijo).
 **Alternatives considered**: ninguna — este punto está fijado por la constitución, no se
 evaluaron alternativas (Principio III).
 
-## 7. Testing
+## 8. Diseño visual de referencia (Google Stitch)
+
+**Decision**: Adoptar tal cual el design system y los 6 mockups exportados de Google
+Stitch (`specs/001-asadarg-mvp/design/`) como fuente de verdad de UI: paleta de colores
+(tokens M3 en `asadarg_design_system/DESIGN.md`), tipografía (Montserrat + Be Vietnam
+Pro), spacing, shapes (`rounded-2xl` cards, botones pill) y copy en voseo. Se traduce a
+`web/tailwind.config.js` como extensión del tema por defecto.
+
+**Rationale**: el diseño ya resuelve exactamente lo que pedía la constitución (paleta
+bandera argentina + tono asadero informal) y con más detalle del que hubiéramos definido
+nosotros mismos — reusarlo evita rehacer trabajo de diseño. Los mockups también revelaron
+dos decisiones de IA no explícitas en la spec original, ya incorporadas: (a) el formulario
+de carga de gasto es uno solo con un toggle Carne/Extras, no dos formularios separados;
+(b) el detalle de un evento usa tabs internos (Gastos / Balance / Stats) en vez de rutas
+separadas top-level.
+
+**Alternatives considered**: diseñar la UI desde cero durante la implementación —
+descartado, ya existe un diseño validado por el usuario.
+
+## 9. Gráfico de tendencia de precio/kg (FR-025b)
+
+**Decision**: Implementar el line chart de "Precio del kg de asado — últimos 6 meses"
+como un componente SVG propio en `web/src/components/PrecioKgChart.tsx` (path SVG
+generado a partir de los puntos mensuales), sin agregar ninguna librería de charting.
+
+**Rationale**: es un único gráfico simple (una línea, 6 puntos) — agregar una librería
+completa de charting para esto sería sobre-ingeniería (Principio I, Simplicidad). Un
+componente SVG a mano es ~30-40 líneas y queda testeable como el resto de la lógica pura
+si hiciera falta.
+
+**Alternatives considered**: Recharts / Chart.js — descartadas por ser dependencias
+pesadas para un solo gráfico; se reconsideraría solo si a futuro se agregan más
+visualizaciones.
+
+## 10. Testing
 
 **Decision**: Vitest para los tests unitarios de `splitting.ts` y `settlements.ts`.
 

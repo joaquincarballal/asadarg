@@ -24,7 +24,14 @@ cliente; el Cloudflare Worker de keep-alive también en TypeScript.
 
 **Primary Dependencies**: React, Vite, `@supabase/supabase-js` (auth/DB/storage),
 `vite-plugin-pwa` (manifest + service worker), `browser-image-compression` (compresión
-client-side de fotos a ~200KB), `wrangler` (deploy a Cloudflare Pages y al Worker).
+client-side de fotos a ~200KB), `wrangler` (deploy a Cloudflare Pages y al Worker). Sin
+librería de charting — el único gráfico (tendencia de precio/kg) se hace a mano en SVG
+(ver `research.md` §9).
+
+**Diseño visual**: `specs/001-asadarg-mvp/design/` contiene los 6 mockups (Google Stitch)
+y el design system (`asadarg_design_system/DESIGN.md`) que se adoptan como fuente de
+verdad de UI — paleta, tipografía, spacing y shapes se trasladan directo a
+`web/tailwind.config.js` (ver `research.md` §8).
 
 **Storage**: Supabase Postgres (eventos, participantes, gastos, cortes de carne) +
 Supabase Storage (fotos de eventos). Sin base de datos propia ni backend intermedio.

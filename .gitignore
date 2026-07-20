@@ -18,5 +18,8 @@ dist/
 # OS
 .DS_Store
 
+# Raw design export uploads (contenido ya extraído a specs/*/design/)
+*.zip
+
 # Claude Code local-only state
 .claude/settings.local.json

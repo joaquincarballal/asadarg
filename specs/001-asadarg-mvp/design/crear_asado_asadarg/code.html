@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es-AR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Nuevo Asado - Asadarg</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Montserrat:wght@400;600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "on-background": "#111c2d",
+                      "on-tertiary-fixed-variant": "#633f00",
+                      "on-tertiary-container": "#553600",
+                      "surface-tint": "#236391",
+                      "on-primary-container": "#003f65",
+                      "primary-fixed-dim": "#96ccff",
+                      "primary-fixed": "#cee5ff",
+                      "on-secondary-container": "#6c4d00",
+                      "primary": "#236391",
+                      "tertiary-fixed": "#ffddb4",
+                      "on-tertiary-fixed": "#291800",
+                      "error": "#ba1a1a",
+                      "on-primary-fixed-variant": "#004a75",
+                      "on-surface": "#111c2d",
+                      "tertiary-fixed-dim": "#f9bb66",
+                      "outline-variant": "#c1c7d0",
+                      "error-container": "#ffdad6",
+                      "surface-variant": "#d8e3fb",
+                      "on-error-container": "#93000a",
+                      "surface-bright": "#f9f9ff",
+                      "on-secondary-fixed-variant": "#5d4200",
+                      "secondary-fixed-dim": "#febb1b",
+                      "on-tertiary": "#ffffff",
+                      "secondary": "#7b5800",
+                      "on-secondary-fixed": "#271900",
+                      "primary-container": "#74acdf",
+                      "outline": "#717880",
+                      "inverse-on-surface": "#ecf1ff",
+                      "on-error": "#ffffff",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-low": "#f0f3ff",
+                      "surface-dim": "#cfdaf2",
+                      "secondary-fixed": "#ffdea6",
+                      "tertiary": "#825502",
+                      "on-secondary": "#ffffff",
+                      "surface": "#f9f9ff",
+                      "background": "#f9f9ff",
+                      "on-primary-fixed": "#001d32",
+                      "on-surface-variant": "#41474f",
+                      "inverse-surface": "#263143",
+                      "surface-container-high": "#dee8ff",
+                      "secondary-container": "#febb1b",
+                      "on-primary": "#ffffff",
+                      "surface-container-highest": "#d8e3fb",
+                      "inverse-primary": "#96ccff",
+                      "tertiary-container": "#d59c4a",
+                      "surface-container": "#e7eeff"
+              },
+              "borderRadius": {
+                      "DEFAULT": "1rem",
+                      "lg": "2rem",
+                      "xl": "3rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "container-padding": "20px",
+                      "lg": "24px",
+                      "unit": "4px",
+                      "xs": "4px",
+                      "stack-gap": "12px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "xl": "32px"
+              },
+              "fontFamily": {
+                      "label-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "body-md": [
+                              "Be Vietnam Pro"
+                      ],
+                      "display-lg-mobile": [
+                              "Montserrat"
+                      ],
+                      "display-lg": [
+                              "Montserrat"
+                      ],
+                      "body-lg": [
+                              "Be Vietnam Pro"
+                      ],
+                      "headline-sm": [
+                              "Montserrat"
+                      ],
+                      "headline-md": [
+                              "Montserrat"
+                      ]
+              },
+              "fontSize": {
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "display-lg-mobile": [
+                              "28px",
+                              {
+                                      "lineHeight": "36px",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "display-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-sm": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-md": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "700"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+      </script>
+<style>
+        body {
+            background-color: theme('colors.surface-container-lowest');
+        }
+      </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="text-on-background font-body-md antialiased min-h-screen pb-24 md:pb-0">
+<!-- TopAppBar (From JSON) -->
+<header class="bg-surface dark:bg-surface-container-lowest text-primary dark:text-primary-fixed-dim font-headline-sm text-headline-sm-mobile md:text-headline-sm docked full-width top-0 shadow-sm flex justify-between items-center px-container-padding h-16 w-full max-w-[480px] mx-auto sticky z-50">
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150 p-2 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">arrow_back</span>
+</button>
+</div>
+<div class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight">
+            Asadarg
+        </div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150 p-2 rounded-full">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">notifications</span>
+</button>
+</div>
+</header>
+<!-- Main Content Canvas -->
+<main class="w-full max-w-[480px] mx-auto px-container-padding pt-md pb-xl">
+<h1 class="font-headline-md text-headline-md text-on-surface mb-lg">Nuevo Asado</h1>
+<form class="flex flex-col gap-lg">
+<!-- Photo Upload Area -->
+<div class="w-full aspect-[2/1] rounded-2xl border-2 border-dashed border-primary-container bg-surface-container-low flex flex-col items-center justify-center cursor-pointer hover:bg-surface-container transition-colors group relative overflow-hidden">
+<span class="material-symbols-outlined text-[48px] text-primary-container group-hover:scale-110 transition-transform duration-300" style="font-variation-settings: 'FILL' 0;">add_a_photo</span>
+<span class="font-label-md text-label-md text-primary mt-sm">Subir foto de portada</span>
+<!-- Hidden input -->
+<input accept="image/*" class="absolute inset-0 opacity-0 cursor-pointer" type="file"/>
+</div>
+<!-- Event Name -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant" for="event-name">Nombre del evento</label>
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-DEFAULT px-md py-3 font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors placeholder:text-outline" id="event-name" placeholder="Ej. Asado de los Sábados" type="text"/>
+</div>
+<!-- Date Picker -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-md text-label-md text-on-surface-variant" for="event-date">¿Cuándo nos juntamos?</label>
+<div class="relative">
+<input class="w-full bg-surface-container-lowest border border-outline-variant rounded-DEFAULT pl-md pr-12 py-3 font-body-lg text-body-lg text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors appearance-none relative z-10 bg-transparent" id="event-date" type="date"/>
+<span class="material-symbols-outlined absolute right-md top-1/2 -translate-y-1/2 text-on-surface-variant z-0 pointer-events-none" style="font-variation-settings: 'FILL' 0;">calendar_month</span>
+</div>
+</div>
+<!-- Invite Friends -->
+<div class="flex flex-col gap-xs mt-sm">
+<label class="font-label-md text-label-md text-on-surface-variant">Participantes</label>
+<button class="w-full flex items-center justify-between bg-surface-container-low rounded-DEFAULT p-md border border-transparent hover:border-primary-container transition-colors active:scale-[0.98]" type="button">
+<div class="flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary-container flex items-center justify-center text-on-primary-container">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">group_add</span>
+</div>
+<span class="font-body-md text-body-md text-on-surface">Invitar amigos</span>
+</div>
+<span class="material-symbols-outlined text-primary" style="font-variation-settings: 'FILL' 0;">share</span>
+</button>
+</div>
+<!-- Asador Titular Selector -->
+<div class="flex flex-col gap-sm mt-md">
+<h3 class="font-headline-sm text-headline-sm text-on-surface">Asador Titular</h3>
+<p class="font-body-md text-body-md text-on-surface-variant text-sm mb-2">¿Quién se pone la 10 en la parrilla?</p>
+<div class="grid grid-cols-4 gap-sm">
+<!-- Avatar 1 (Selected) -->
+<div class="flex flex-col items-center gap-unit cursor-pointer group">
+<div class="w-16 h-16 rounded-full border-[3px] border-secondary-container p-0.5 relative">
+<img class="w-full h-full rounded-full object-cover" data-alt="Close up portrait of a young Argentine man smiling, wearing a casual t-shirt, brightly lit outdoors on a sunny afternoon, conveying a friendly and informal vibe, modern light UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCn3_elGH4eF6oYa4UEWVidCt4yq9LETwTw5f15hMC0i4HA60mD_avZge9ZEpOaB-b6IK2I_wJNDEbZ4AiEMrLZmfWDbo3juRhEPjPWTvA5veMNotat4KT-ZWfKPRIQOS8zLPFlbkBUIasW-37s20jBFQHxYD8vZwTHO_TnlO5GdJ6IKjiS5iSo4VGhjLz1mZ-ur5-R0nNVI5ZhtFsZrPP1ql5ahAHln3DhzoD3cvn6J_39VzI_byUWxgKaUq85ihGs_Kz89yGhHFE"/>
+<div class="absolute -bottom-1 -right-1 bg-secondary-container text-on-secondary-container rounded-full p-0.5 shadow-sm">
+<span class="material-symbols-outlined text-[14px]" style="font-variation-settings: 'FILL' 1;">check</span>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface truncate w-full text-center">Vos</span>
+</div>
+<!-- Avatar 2 -->
+<div class="flex flex-col items-center gap-unit cursor-pointer group opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full border-2 border-transparent hover:border-outline-variant p-0.5 transition-colors">
+<img class="w-full h-full rounded-full object-cover" data-alt="Portrait of a cheerful young woman with curly hair, natural daylight, casual setting, soft shadows, evoking a warm and friendly atmosphere, modern light UI style." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC8y4Bxc6eFPwY4rdX15A38I7jcjTcCpGTh0dsHP4MjVdDAYVA4ikcToiUD12f_2MFG0wu2OfVHQcHiA4UQ_fT24bcRIYH7mVmixGCP33ipS-2Uax5pmkWch8uEa-gfZIj4oHNRwG9ie5PqcOmtJVcxyMkhD9SyeIiLJXkAZ6zoM2E49kfhJatMfPUfXZFXfKQBFy7a9Gw8HvOsj59aGF1VRWsk22T-y0vMu-zoy_NZ3Yk2VMNkexmdf5b8xpHR3avmr2RVAy68lAc"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface truncate w-full text-center">Mica</span>
+</div>
+<!-- Avatar 3 -->
+<div class="flex flex-col items-center gap-unit cursor-pointer group opacity-60 hover:opacity-100 transition-opacity">
+<div class="w-16 h-16 rounded-full border-2 border-transparent hover:border-outline-variant p-0.5 transition-colors">
+<img class="w-full h-full rounded-full object-cover" data-alt="Portrait of an older Argentine man with a short beard, wearing a classic polo shirt, outdoors with a slight blur in the background, warm sunny lighting, convivial mood, light mode UI." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDPcN1ddAXrX7bqdi5xDt7FiP5FQ-seRAnMrEYg2xazbGWBfQ_YIfingeWVlnxEEWazASA6yBzYJmfDz_N9akVUhvL_0NRHvJtBOESIVs3enYm4jE6fh7GlrYL_IQJ-tQqb-e44rpTd4PYZ3K_TCZ0M-YApQIDnfZJFyRDGwFm27_eyciGS2v8g2rA_2k0WRoTHoraTlU3Xbh5IPLF_v_s7RjHb9adGw3GAcH9OsPvpwuFjPHOgLEmGAJfONo6daSbEpkR6Y7rh09s"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface-variant group-hover:text-on-surface truncate w-full text-center">Tío M.</span>
+</div>
+<!-- Add New -->
+<div class="flex flex-col items-center gap-unit cursor-pointer group">
+<div class="w-16 h-16 rounded-full bg-surface-variant flex items-center justify-center text-primary group-hover:bg-surface-container-high transition-colors">
+<span class="material-symbols-outlined text-[24px]" style="font-variation-settings: 'FILL' 0;">add</span>
+</div>
+<span class="font-label-md text-label-md text-primary truncate w-full text-center">Otro</span>
+</div>
+</div>
+</div>
+<!-- Submit Button (Sticky Bottom on Mobile) -->
+<div class="fixed md:static bottom-0 left-0 w-full md:w-auto p-container-padding md:p-0 bg-surface md:bg-transparent shadow-[0px_-4px_20px_rgba(30,41,59,0.08)] md:shadow-none z-40 mt-xl">
+<button class="w-full bg-[#F6B40E] text-[#111c2d] font-headline-sm text-headline-sm uppercase py-4 rounded-full shadow-[0px_8px_24px_rgba(246,180,14,0.3)] hover:scale-[1.02] active:scale-95 transition-transform flex items-center justify-center gap-sm" type="submit">
+                    ¡Prendé el fuego! <span class="text-2xl">🔥</span>
+</button>
+</div>
+</form>
+</main>
+</body></html>

@@ -34,3 +34,7 @@
 - Las 3 clarificaciones (cierre de evento, permisos de edición, mecánica de invitación)
   fueron resueltas por el usuario y volcadas a FR-004, FR-007, FR-018/FR-019. Checklist
   completo — spec lista para `/speckit-plan`.
+- 2026-07-19: tras revisar el diseño visual (`specs/001-asadarg-mvp/design/`, export de
+  Google Stitch) se sumaron FR-019b (marcar settlement como pagado) y FR-025b (tendencia
+  de precio/kg), confirmados con el usuario. No reabren clarificaciones — son extensiones
+  puntuales, no ambigüedades.

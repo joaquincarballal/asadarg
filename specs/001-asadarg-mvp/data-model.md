@@ -107,11 +107,15 @@ equitativo por defecto = una fila por participante del evento con `proporcion = 
 | de_participante_id | uuid (FK → perfil.id) | Quién paga |
 | a_participante_id | uuid (FK → perfil.id) | Quién recibe |
 | monto_ars | numeric | |
+| pagado | boolean | Default `false` — marcado manualmente (FR-019b), no hay pago real |
+| pagado_at | timestamptz, nullable | Se completa cuando `pagado` pasa a `true` |
 | created_at | timestamptz | Igual a `evento.closed_at` |
 
 Se genera una única vez, atómicamente, al cerrar el evento (ver
 `contracts/close-event-rpc.md`). No se recalcula después salvo que se reabra el evento
-(fuera de scope v1 — ver Assumptions en spec.md).
+(fuera de scope v1 — ver Assumptions en spec.md). Marcar `pagado = true` es la única
+escritura permitida sobre una fila de `settlement` después de creada — no se edita monto
+ni origen/destino.
 
 ## Relaciones
 
@@ -133,8 +137,11 @@ evento 1──* settlement (de/a perfil)
   COUNT(evento total)`.
 - **Ranking Asadores Titulares** (FR-023): `COUNT(*) GROUP BY asador_titular_id ORDER BY
   COUNT DESC`.
-- **Stats por evento** (FR-024): agregados de `gasto` filtrados por `evento_id`, dividido
+- **Stats por evento** (FR-025): agregados de `gasto` filtrados por `evento_id`, dividido
   por `COUNT(evento_participante)` para el per cápita.
+- **Tendencia de precio/kg** (FR-025b): `AVG(precio_por_kg) GROUP BY date_trunc('month',
+  gasto.created_at)` sobre gastos `categoria = 'carne'` de los últimos 6 meses,
+  cross-evento.
 
 Estas se implementan como vistas SQL (`vista_stats_historicas`,
 `vista_stats_evento`) o queries directas desde el cliente — decisión de implementación,

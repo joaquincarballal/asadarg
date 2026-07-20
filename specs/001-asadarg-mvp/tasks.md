@@ -85,9 +85,13 @@ shell de la app)
       de T014)
 - [ ] T018 Configurar PWA (`vite-plugin-pwa`) en `web/vite.config.ts` + manifest base en
       `web/public/manifest.json`
+- [ ] T018b [P] Trasladar el design system de
+      `specs/001-asadarg-mvp/design/asadarg_design_system/DESIGN.md` (colores, tipografía,
+      spacing, shapes) a `web/tailwind.config.js`, e importar Montserrat + Be Vietnam Pro
+      en `web/index.html`
 
 **Checkpoint**: login con Google funciona, esquema de datos existe con RLS, la app
-levanta con un shell navegable vacío.
+levanta con un shell navegable vacío con el theme de Asadarg aplicado.
 
 ---
 
@@ -124,12 +128,11 @@ por kg.
 - [ ] T026 [US1] Implementar `web/src/lib/gastoService.ts`: guardar gasto capturando
       cotización USD (T015) y calculando precio/kg si es Carne, con fallback si la
       cotización falla (FR-012, FR-013, FR-020)
-- [ ] T027 [US1] Implementar formulario de carga de gasto de Carne (corte del dropdown
-      editable, kg, monto ARS, pagador) en `web/src/components/FormGastoCarne.tsx`
+- [ ] T027 [US1] Implementar formulario único de carga de gasto con toggle Carne/Extras
+      (corte dropdown editable + kg cuando es Carne; concepto libre/sugerido cuando es
+      Extras; monto ARS y pagador en ambos casos), según
+      `design/cargar_gasto_asadarg/code.html`, en `web/src/components/FormGasto.tsx`
       (depende de T021, T026)
-- [ ] T028 [US1] Implementar formulario de carga de gasto de Extras (concepto libre o
-      sugerido, monto ARS, pagador) en `web/src/components/FormGastoExtra.tsx` (depende
-      de T021, T026)
 - [ ] T029 [US1] Implementar listado de gastos del evento, visible y cargable por
       cualquier participante, con edición/borrado abierto a todos (FR-007) en
       `web/src/pages/EventoDetalle.tsx`
@@ -162,7 +165,10 @@ ver cuánto puso y cuánto le corresponde a cada uno; al cerrar, ver los settlem
 - [ ] T033 [US2] Implementar `cerrarEvento()` en `web/src/lib/eventoService.ts`, invocando
       el RPC `cerrar_evento` (`contracts/close-event-rpc.md`, depende de T011)
 - [ ] T034 [US2] Implementar vista de settlements finales post-cierre en
-      `web/src/pages/Settlements.tsx` (depende de T033)
+      `web/src/pages/Settlements.tsx` (depende de T033), según `design/saldos_asadarg/code.html`
+- [ ] T034b [US2] Implementar acción "Pagar" (marcar settlement como `pagado`, sin
+      procesar pago real — FR-019b) en `web/src/lib/eventoService.ts` y el botón
+      correspondiente en `web/src/pages/Settlements.tsx` (depende de T034)
 - [ ] T035 [US2] Deshabilitar en la UI la carga/edición/borrado de gastos cuando
       `evento.estado = 'cerrado'` (FR-019) en `web/src/pages/EventoDetalle.tsx`
 
@@ -180,7 +186,8 @@ el acumulado histórico y el ranking.
 
 ### Implementation for User Story 3
 
-- [ ] T036 [US3] Crear vistas SQL `vista_stats_historicas` y `vista_stats_evento` en
+- [ ] T036 [US3] Crear vistas SQL `vista_stats_historicas`, `vista_stats_evento` y
+      `vista_precio_kg_mensual` (últimos 6 meses, FR-025b) en
       `supabase/migrations/0005_stats_views.sql` (agregados de `data-model.md` §
       "Estadísticas derivadas")
 - [ ] T037 [P] [US3] Implementar `web/src/lib/statsService.ts`: queries de % asistencia
@@ -188,7 +195,10 @@ el acumulado histórico y el ranking.
       (depende de T036)
 - [ ] T038 [P] [US3] Implementar pantalla de estadísticas del grupo (kg totales, gasto
       total ARS+USD, cantidad de asados, ranking, % asistencia) en
-      `web/src/pages/EstadisticasGrupo.tsx`
+      `web/src/pages/EstadisticasGrupo.tsx`, según `design/estad_sticas_asadarg/code.html`
+- [ ] T038b [P] [US3] Implementar `web/src/components/PrecioKgChart.tsx` (line chart SVG
+      a mano, sin librería — `research.md` §9) y conectarlo a `vista_precio_kg_mensual`
+      en `EstadisticasGrupo.tsx` (depende de T036, T038)
 - [ ] T039 [P] [US3] Implementar sección de estadísticas por evento (kg totales, gasto
       total, per cápita, precio promedio/kg) en `web/src/pages/EstadisticasEvento.tsx`
 

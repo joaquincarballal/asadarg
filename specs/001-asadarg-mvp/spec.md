@@ -62,6 +62,9 @@ corresponde pagar; al cerrar el evento, ver la lista de transferencias sugeridas
 3. **Given** un evento con balances calculados, **When** el evento se cierra, **Then** la
    app muestra la lista mínima de transferencias necesarias para saldar todas las deudas
    del evento.
+4. **Given** una transferencia sugerida tras el cierre, **When** quien la recibe confirma
+   que ya se la pagaron (botón "Pagar"), **Then** esa transferencia queda marcada como
+   saldada, sin que la app mueva ni procese plata real.
 
 ---
 
@@ -90,6 +93,9 @@ Asadores Titulares.
 3. **Given** un evento puntual, **When** un participante abre las estadísticas de ese
    evento, **Then** ve el total de kilogramos, el gasto total, el gasto per cápita y el
    precio promedio por kilogramo de ese asado.
+4. **Given** gastos de Carne cargados en los últimos 6 meses, **When** un participante abre
+   las estadísticas del grupo, **Then** ve un gráfico de la evolución mensual del precio
+   promedio por kilogramo en ese período.
 
 ---
 
@@ -157,6 +163,10 @@ Asadores Titulares.
   todas las deudas del evento.
 - **FR-019**: Una vez cerrado un evento, el sistema NO DEBE permitir agregar, editar ni
   borrar gastos de ese evento; debe mostrar los settlements finales calculados al cierre.
+- **FR-019b**: Cualquier participante DEBE poder marcar una transferencia (settlement)
+  como pagada. Esto es un registro manual dentro de la app (bookkeeping) — la app NO
+  procesa ni mueve dinero real; el pago en sí ocurre por fuera (transferencia bancaria,
+  efectivo, etc.).
 - **FR-020**: Si el servicio externo de cotización no responde al momento de guardar un
   gasto, el sistema DEBE guardar igual el gasto en ARS y marcar el equivalente en USD como
   no disponible, sin bloquear la carga.
@@ -171,6 +181,9 @@ Asadores Titulares.
   cuántas veces ofició cada participante.
 - **FR-025**: Para cada evento, el sistema DEBE mostrar: kilogramos totales, gasto total,
   gasto per cápita y precio promedio por kilogramo.
+- **FR-025b**: El sistema DEBE mostrar la evolución mensual del precio promedio por
+  kilogramo de carne de los últimos 6 meses, agregando los gastos de categoría Carne de
+  todos los eventos del grupo en ese período.
 - **FR-026**: La aplicación DEBE poder instalarse en el dispositivo móvil del usuario (agregar
   a pantalla de inicio / app instalable).
 - **FR-027**: Todo el texto de cara al usuario DEBE estar en español rioplatense, con tono
@@ -188,7 +201,8 @@ Asadores Titulares.
 - **Corte de Carne**: catálogo compartido y editable de cortes disponibles para elegir al
   cargar un gasto de Carne.
 - **Settlement**: transferencia sugerida (origen, destino, monto) resultante del cálculo
-  de cierre de un evento, que minimiza la cantidad total de transferencias.
+  de cierre de un evento, que minimiza la cantidad total de transferencias; incluye si
+  fue marcada como pagada (registro manual, sin procesamiento real de pago).
 
 ## Success Criteria *(mandatory)*
 
@@ -217,6 +231,9 @@ Asadores Titulares.
   globalmente entre todos los eventos del grupo (no hay catálogos separados por evento).
 - No hay límite de cantidad de participantes por evento ni de eventos históricos dentro
   del alcance de v1.
+- El diseño visual de referencia (paleta, tipografía, layout de cada pantalla) vive en
+  `specs/001-asadarg-mvp/design/` (mockups estáticos exportados de Google Stitch) y se
+  adopta como fuente de verdad de UI — no reemplaza esta spec funcional, la complementa.
 - La app sirve a un único grupo de amigos; no se contemplan múltiples grupos o comunidades
   aisladas entre sí (ver Fuera de Scope).
 - **Fuera de scope v1** (explícito): notificaciones push, pagos integrados (MercadoPago),

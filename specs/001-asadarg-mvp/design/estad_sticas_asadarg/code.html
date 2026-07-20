@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+
+<html class="light" lang="es-AR"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Estadísticas del Grupo - Asadarg</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;600&amp;family=Montserrat:wght@600;700&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-background": "#111c2d",
+                        "on-tertiary-fixed-variant": "#633f00",
+                        "on-tertiary-container": "#553600",
+                        "surface-tint": "#236391",
+                        "on-primary-container": "#003f65",
+                        "primary-fixed-dim": "#96ccff",
+                        "primary-fixed": "#cee5ff",
+                        "on-secondary-container": "#6c4d00",
+                        "primary": "#236391",
+                        "tertiary-fixed": "#ffddb4",
+                        "on-tertiary-fixed": "#291800",
+                        "error": "#ba1a1a",
+                        "on-primary-fixed-variant": "#004a75",
+                        "on-surface": "#111c2d",
+                        "tertiary-fixed-dim": "#f9bb66",
+                        "outline-variant": "#c1c7d0",
+                        "error-container": "#ffdad6",
+                        "surface-variant": "#d8e3fb",
+                        "on-error-container": "#93000a",
+                        "surface-bright": "#f9f9ff",
+                        "on-secondary-fixed-variant": "#5d4200",
+                        "secondary-fixed-dim": "#febb1b",
+                        "on-tertiary": "#ffffff",
+                        "secondary": "#7b5800",
+                        "on-secondary-fixed": "#271900",
+                        "primary-container": "#74acdf",
+                        "outline": "#717880",
+                        "inverse-on-surface": "#ecf1ff",
+                        "on-error": "#ffffff",
+                        "surface-container-lowest": "#ffffff",
+                        "surface-container-low": "#f0f3ff",
+                        "surface-dim": "#cfdaf2",
+                        "secondary-fixed": "#ffdea6",
+                        "tertiary": "#825502",
+                        "on-secondary": "#ffffff",
+                        "surface": "#f9f9ff",
+                        "background": "#f9f9ff",
+                        "on-primary-fixed": "#001d32",
+                        "on-surface-variant": "#41474f",
+                        "inverse-surface": "#263143",
+                        "surface-container-high": "#dee8ff",
+                        "secondary-container": "#febb1b",
+                        "on-primary": "#ffffff",
+                        "surface-container-highest": "#d8e3fb",
+                        "inverse-primary": "#96ccff",
+                        "tertiary-container": "#d59c4a",
+                        "surface-container": "#e7eeff"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "1rem",
+                        "lg": "2rem",
+                        "xl": "3rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-padding": "20px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "xs": "4px",
+                        "stack-gap": "12px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xl": "32px"
+                    },
+                    "fontFamily": {
+                        "label-md": ["Be Vietnam Pro"],
+                        "body-md": ["Be Vietnam Pro"],
+                        "display-lg-mobile": ["Montserrat"],
+                        "display-lg": ["Montserrat"],
+                        "body-lg": ["Be Vietnam Pro"],
+                        "headline-sm": ["Montserrat"],
+                        "headline-md": ["Montserrat"]
+                    },
+                    "fontSize": {
+                        "label-md": ["14px", { "lineHeight": "20px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "display-lg-mobile": ["28px", { "lineHeight": "36px", "fontWeight": "700" }],
+                        "display-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-sm": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-md": ["24px", { "lineHeight": "32px", "fontWeight": "700" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 600, 'GRAD' 0, 'opsz' 24;
+        }
+        .custom-shadow {
+            box-shadow: 0px 4px 20px rgba(30, 41, 59, 0.08);
+        }
+        /* SVG Ring Animation Setup */
+        .progress-ring__circle {
+            transition: stroke-dashoffset 1s ease-in-out;
+            transform: rotate(-90deg);
+            transform-origin: 50% 50%;
+        }
+    </style>
+<style>
+    body {
+      min-height: max(884px, 100dvh);
+    }
+  </style>
+  </head>
+<body class="bg-background text-on-surface font-body-md antialiased pb-[100px]">
+<!-- TopAppBar Shared Component -->
+<header class="bg-surface dark:bg-surface-container-lowest shadow-sm docked full-width top-0 z-40 sticky">
+<div class="flex justify-between items-center px-container-padding h-16 w-full max-w-[480px] mx-auto">
+<div class="flex items-center justify-center w-10 h-10 rounded-full overflow-hidden bg-surface-variant flex-shrink-0 cursor-pointer active:scale-95 duration-150">
+<img alt="User profile photo" class="w-full h-full object-cover" data-alt="A close-up, warm portrait of a smiling person holding a mate cup outdoors. The lighting is soft, natural afternoon sunlight creating a convivial, relaxed Argentine asado atmosphere. Modern light-mode aesthetic with vibrant natural colors." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCNhlngbpPxj4e-Fl7-qcR5YnmpfYIdQnQhPEFjFV_ql5eDb5ScY5LnXVoBiQa5ny3G-7hBLKFIVf5SaTEqAfPBMkg8FKn_9-akfwMrh5eHvyxbavrU55bcG0ge-FitdAPUXaH9Q6V5J0iQ4YZGOlDrRgCzqrP-aROhG3QIn4t_KxqoaO_MrDVGh721mmy7f0JETzBf5USTILrGd11fLB-7jbtGWXaaAANVKQyRgGgDI5N1ArEdW6M-ReY8UTNwlngdhLHzscA4gjg"/>
+</div>
+<h1 class="font-display-lg-mobile text-display-lg-mobile text-primary dark:text-primary-fixed-dim tracking-tight">Asadarg</h1>
+<button class="w-10 h-10 flex items-center justify-center rounded-full text-on-surface-variant hover:bg-surface-container-low transition-colors active:scale-95 duration-150">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+</div>
+</header>
+<main class="w-full max-w-[480px] mx-auto px-container-padding pt-lg flex flex-col gap-lg">
+<!-- Page Header -->
+<section>
+<h2 class="font-headline-md text-headline-md text-on-surface">Estadísticas del Grupo</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Los números no mienten, papá.</p>
+</section>
+<!-- Totals Card (Bento style) -->
+<section class="bg-surface-container-lowest rounded-[2rem] p-lg custom-shadow relative overflow-hidden flex flex-col justify-center items-center text-center">
+<!-- Decorative background element -->
+<div class="absolute -top-10 -right-10 w-32 h-32 bg-secondary-container/20 rounded-full blur-2xl"></div>
+<div class="absolute -bottom-8 -left-8 w-24 h-24 bg-primary-container/20 rounded-full blur-xl"></div>
+<p class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider mb-sm relative z-10">Total Gastado Historico</p>
+<div class="font-display-lg-mobile text-display-lg-mobile text-on-surface relative z-10">$450.000 ARS</div>
+<div class="font-body-md text-body-md text-primary mt-xs bg-primary-container/20 px-sm py-1 rounded-full relative z-10">(u$s 450)</div>
+</section>
+<!-- Attendance (Circular Progress) -->
+<section>
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-md">Asistencia</h3>
+<div class="flex gap-md overflow-x-auto pb-sm snap-x scrollbar-hide">
+<!-- Person 1 -->
+<div class="flex flex-col items-center gap-xs snap-center flex-shrink-0">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="44" stroke-width="6"></circle>
+<!-- 90% attendance -->
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="44" stroke-dasharray="276.46" stroke-dashoffset="27.64" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 m-auto w-14 h-14 rounded-full overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="A portrait of an Argentine man with a beard, smiling near a barbecue grill. Smoke is lightly visible in the background. Bright, modern daylight setting with warm, engaging tones." src="https://lh3.googleusercontent.com/aida-public/AB6AXuC7FhjBCqyZNxyuzZ0na36QKPoKWBnzhPGeqZeaeKKppE0b_avHX8U4SfqSuuJR2B-Bz7kZ1L3SGFKScygCXzl3dHhuC9V-ysBOB4dPkp0EUxz_WxfZ2m9crUG8e40if0sybTo6hA-yoKGsCUC_B9UJFj_b-n3fRTyVbGWlrCqvOcEfdniWDxhWZllq6VIg2IrpdDemmKdBZ_PfvUT20fFlI5YmD139okjEX2Z-eKj_eHQvM6RnX_P2jqOP0Z6a4q-l3eC_bCH2Vi4"/>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Mati</span>
+<span class="font-body-md text-sm text-on-surface-variant">90%</span>
+</div>
+<!-- Person 2 -->
+<div class="flex flex-col items-center gap-xs snap-center flex-shrink-0">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="44" stroke-width="6"></circle>
+<!-- 75% attendance -->
+<circle class="text-secondary-container stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="44" stroke-dasharray="276.46" stroke-dashoffset="69.11" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 m-auto w-14 h-14 rounded-full overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="A cheerful woman holding a glass of red wine, standing outdoors on a sunny day. The style is modern, minimalist, and energetic, focusing on the social aspect of a weekend gathering." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAzVmwmaUc3vJBm-L1ulx6Shg3-A-hjOP1YY5OsbE_zkCZidAlA5fJJJrpGZJvpLJneRGDerzAPVz5Ti3fWzqswC6cChrfWGVOnE6tU7NysgdCjpFgMfMQkuFaIOTkBplQ1-rR22ASPLwNWbUFWz5pFZZcMSMSkQp9WNR9xJOzjSBKAXiIGr6qfxSvBJ4zReYptCzu9NnDNBIwChMCCAiXdJVWPIsvR0kdRKnmdwcBePUzlxrk8R7Hqtb3Vd16ARvqYgcIoo8lW67A"/>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Sofi</span>
+<span class="font-body-md text-sm text-on-surface-variant">75%</span>
+</div>
+<!-- Person 3 -->
+<div class="flex flex-col items-center gap-xs snap-center flex-shrink-0">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="44" stroke-width="6"></circle>
+<!-- 100% attendance -->
+<circle class="text-primary stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="44" stroke-dasharray="276.46" stroke-dashoffset="0" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 m-auto w-14 h-14 rounded-full overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="A young man wearing a casual cap, laughing while holding tongs. The background is a soft-focus garden setting during daytime. Warm sunlight, crisp shadows, modern UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDucoxHWF_YkgGzDXsN0gMizHE3rlAuJXfTr14B36-RWn1ujFm_ffPpt3S5DGFKaRGUVt6vx_rgfF-hAWJbCbDpx_MVg4u3T5DZAt7bpgNVeEPFB3OMOVsl1az-7LH6kUhigb4xmN7EPdm4F5InRaiDqtMtL83LvBvZQdAkG-LoSdo095Eal32kyPiUow02Az7b4cmD0RpPxGue4JiEuTjv1fKMCY00ZmJWW51uPSCbMo4eI9FbdKIrbQ2rQvqujKDgCGYc6z10fh4"/>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Pedro</span>
+<span class="font-body-md text-sm text-on-surface-variant">100%</span>
+</div>
+<!-- Person 4 -->
+<div class="flex flex-col items-center gap-xs snap-center flex-shrink-0">
+<div class="relative w-20 h-20">
+<svg class="w-full h-full" viewbox="0 0 100 100">
+<circle class="text-surface-variant stroke-current" cx="50" cy="50" fill="transparent" r="44" stroke-width="6"></circle>
+<!-- 40% attendance -->
+<circle class="text-outline stroke-current progress-ring__circle" cx="50" cy="50" fill="transparent" r="44" stroke-dasharray="276.46" stroke-dashoffset="165.87" stroke-linecap="round" stroke-width="6"></circle>
+</svg>
+<div class="absolute inset-0 m-auto w-14 h-14 rounded-full overflow-hidden border-2 border-surface-container-lowest">
+<img class="w-full h-full object-cover" data-alt="A slightly blurred portrait of a guy looking away, holding a smartphone. Urban outdoor setting with soft natural light, fitting a casual app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCI8OQjmcSJJGNd6OUJ-fObB5XQQWdeI9NOyK8II6KwjAc_gtDa5zundI_NKNx-zpivWHTG6vbF_JtIBpkrtd45axPi5yUnGBKbAxd50K31t5lEE6Yf1riKSAenizpNUKk8BquKclpAy4Lp_YpkTPUgcgW80nVUcyOwWL3R8J3wQHJBKTuSbyXLrxKDkJhoMagCHmVmMDqQHyeo191vyCX1z8Z4xnZP2CpcyOuPpaLhHxau3_4kPLM0KXV2jZvayVWw6ro53aQYjdE"/>
+</div>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Juani</span>
+<span class="font-body-md text-sm text-on-surface-variant">40%</span>
+</div>
+</div>
+</section>
+<!-- Ranking Card -->
+<section class="bg-surface-container-lowest rounded-[2rem] p-md custom-shadow">
+<div class="flex items-center gap-sm mb-md">
+<span class="material-symbols-outlined icon-fill text-secondary-container text-[28px]">local_fire_department</span>
+<h3 class="font-headline-sm text-headline-sm text-on-surface">El que más prendió el fuego</h3>
+</div>
+<div class="flex flex-col gap-sm">
+<!-- Rank 1 -->
+<div class="flex items-center justify-between p-sm rounded-xl hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A young man wearing a casual cap, laughing while holding tongs. The background is a soft-focus garden setting during daytime. Warm sunlight, crisp shadows, modern UI aesthetic." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCInxb383NdCgpaTOkk6ElzTEloaNcJGSf_PqB-1lY43F5U38oldDE2QGjXo4yjDdkwW8Jpvk3ZmqbVE4Xu46s6e8_IDp4TtnNrxclaV2K_Kwgk7jRIGWEjQ_zk2GEULgSCJS8OJB3Ava10jy5ScuOdrOLGyQx4ZRaPXCcCVJ4jhi9rHHcU8MmRvlvIcu4eAwWuQvrg0LToZVwESoRpY2w-2GSDOh1rRCYi-AkM6glEfxsjVRBXXzcsBYtKrxhRdw6ASkSF8Ec2zMM"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Pedro</span>
+</div>
+<div class="flex items-center gap-xs bg-secondary-container/20 px-3 py-1.5 rounded-full">
+<span class="font-label-md text-label-md text-on-secondary-container">5</span>
+<span class="material-symbols-outlined icon-fill text-secondary-container text-sm">local_fire_department</span>
+</div>
+</div>
+<div class="h-[1px] w-full bg-outline-variant/30 ml-16"></div>
+<!-- Rank 2 -->
+<div class="flex items-center justify-between p-sm rounded-xl hover:bg-surface-container-low transition-colors">
+<div class="flex items-center gap-md">
+<div class="w-12 h-12 rounded-full overflow-hidden flex-shrink-0">
+<img class="w-full h-full object-cover" data-alt="A slightly blurred portrait of a guy looking away, holding a smartphone. Urban outdoor setting with soft natural light, fitting a casual app interface." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBXJAQd6uy-A7d6MHwDq5PdB6FMhWRwkpSJ5MyrSyRPw0rtw1sAFYNbWuWG3Ot42W3d2RD1-OQhevz0qDl-14SoScDmMlTGMXdWZBvEm5tSDl-AnpWe8fl7IaOij-xvlUb7AY8RBMccRAmYI1Az67EAUrcYsTiAwSNMTgpjO3MNt9PS10rT8uwYz5RLoGYlSdcant5Tp9siVQxTQthIu12CzU44L_H-yK1IRottImsBoFPEiz0BTHG28sjB8M_tuqwQ_zIaREmmdP0"/>
+</div>
+<span class="font-label-md text-label-md text-on-surface">Juani</span>
+</div>
+<div class="flex items-center gap-xs bg-surface-variant px-3 py-1.5 rounded-full">
+<span class="font-label-md text-label-md text-on-surface-variant">3</span>
+<span class="material-symbols-outlined text-outline text-sm">local_fire_department</span>
+</div>
+</div>
+</div>
+</section>
+<!-- Chart Section -->
+<section class="bg-surface-container-lowest rounded-[2rem] p-md custom-shadow mb-lg">
+<h3 class="font-headline-sm text-headline-sm text-on-surface mb-xs">Precio del kg de asado</h3>
+<p class="font-body-md text-sm text-on-surface-variant mb-md">Últimos 6 meses</p>
+<!-- Faux Chart Container -->
+<div class="relative w-full h-48 mt-sm flex items-end">
+<!-- Y Axis Labels (Approx) -->
+<div class="absolute left-0 top-0 bottom-6 flex flex-col justify-between text-[10px] text-outline font-label-md z-10">
+<span>$8k</span>
+<span>$6k</span>
+<span>$4k</span>
+</div>
+<!-- Grid Lines -->
+<div class="absolute inset-0 left-6 bottom-6 flex flex-col justify-between border-l border-b border-outline-variant/30">
+<div class="w-full h-[1px] bg-outline-variant/20 dashed"></div>
+<div class="w-full h-[1px] bg-outline-variant/20 dashed"></div>
+<div class="w-full h-[1px] bg-outline-variant/20 dashed"></div>
+</div>
+<!-- SVG Line Graph -->
+<svg class="absolute inset-0 left-6 bottom-6 w-[calc(100%-24px)] h-[calc(100%-24px)] overflow-visible" preserveaspectratio="none" viewbox="0 0 100 100">
+<!-- Gradient for area under line -->
+<defs>
+<lineargradient id="chartGrad" x1="0" x2="0" y1="0" y2="1">
+<stop offset="0%" stop-color="#236391" stop-opacity="0.2"></stop>
+<stop offset="100%" stop-color="#236391" stop-opacity="0"></stop>
+</lineargradient>
+</defs>
+<!-- Area -->
+<path d="M0,80 L20,75 L40,60 L60,45 L80,25 L100,10 L100,100 L0,100 Z" fill="url(#chartGrad)"></path>
+<!-- Line -->
+<path d="M0,80 L20,75 L40,60 L60,45 L80,25 L100,10" fill="none" stroke="#236391" stroke-linecap="round" stroke-linejoin="round" stroke-width="3"></path>
+<!-- Data Points -->
+<circle cx="0" cy="80" fill="#ffffff" r="3" stroke="#236391" stroke-width="2"></circle>
+<circle cx="20" cy="75" fill="#ffffff" r="3" stroke="#236391" stroke-width="2"></circle>
+<circle cx="40" cy="60" fill="#ffffff" r="3" stroke="#236391" stroke-width="2"></circle>
+<circle cx="60" cy="45" fill="#ffffff" r="3" stroke="#236391" stroke-width="2"></circle>
+<circle cx="80" cy="25" fill="#ffffff" r="3" stroke="#236391" stroke-width="2"></circle>
+<circle class="animate-pulse" cx="100" cy="10" fill="#236391" r="4"></circle>
+</svg>
+<!-- X Axis Labels -->
+<div class="absolute left-6 right-0 bottom-0 flex justify-between text-[10px] text-outline font-label-md translate-y-full pt-2">
+<span>Ene</span>
+<span>Feb</span>
+<span>Mar</span>
+<span>Abr</span>
+<span>May</span>
+<span>Jun</span>
+</div>
+</div>
+</section>
+</main>
+<!-- BottomNavBar Shared Component -->
+<nav class="bg-surface dark:bg-surface-container-low shadow-[0px_-4px_20px_rgba(30,41,59,0.08)] fixed bottom-0 w-full rounded-t-lg fixed bottom-0 left-1/2 -translate-x-1/2 w-full max-w-[480px] z-50 flex justify-around items-center py-sm pb-md">
+<!-- Tab 1: Inicio -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 active:scale-90 transition-transform w-16 rounded-xl py-1">
+<span class="material-symbols-outlined mb-1">home</span>
+<span class="font-label-md text-[10px]">Inicio</span>
+</button>
+<!-- Tab 2: Asados -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 active:scale-90 transition-transform w-16 rounded-xl py-1">
+<span class="material-symbols-outlined mb-1">outdoor_grill</span>
+<span class="font-label-md text-[10px]">Asados</span>
+</button>
+<!-- Tab 3: Estadísticas (ACTIVE) -->
+<button class="flex flex-col items-center justify-center bg-secondary-container text-on-secondary-container rounded-full px-4 py-1 hover:bg-surface-variant/50 active:scale-90 transition-transform">
+<span class="material-symbols-outlined icon-fill mb-1">leaderboard</span>
+<span class="font-label-md text-[10px] font-bold">Estadísticas</span>
+</button>
+<!-- Tab 4: Perfil -->
+<button class="flex flex-col items-center justify-center text-on-surface-variant hover:bg-surface-variant/50 active:scale-90 transition-transform w-16 rounded-xl py-1">
+<span class="material-symbols-outlined mb-1">person</span>
+<span class="font-label-md text-[10px]">Perfil</span>
+</button>
+</nav>
+</body></html>
