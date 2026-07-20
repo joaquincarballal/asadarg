@@ -14,9 +14,7 @@ export function Login() {
       <img src="/icon-192.png" alt="AsadARG" className="h-24 w-24 rounded-2xl shadow-sm" />
       <div>
         <h1 className="font-display text-3xl font-bold text-primary">AsadARG</h1>
-        <p className="mt-2 text-on-surface-variant">
-          Che, entrá con tu cuenta de Google para arrancar a repartir gastos de asado.
-        </p>
+        <p className="mt-2 text-on-surface-variant">A comer, hijo de puta!</p>
       </div>
       <button
         onClick={() => loginConGoogle()}
