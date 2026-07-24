@@ -15,9 +15,11 @@ export function Login() {
       <div>
         <h1 className="font-display text-3xl font-bold text-primary">AsadARG</h1>
         <p className="mt-2 text-on-surface-variant">
-          Subsecretaría Nacional de Coordinación Asadera
+          Subsecretaría Nacional
           <br />
-          Delegación Pilar
+          de Coordinación Asadera
+          <br />
+          <span className="font-semibold">Delegación Pilar</span>
         </p>
       </div>
       <button
