@@ -14,7 +14,7 @@ export default defineConfig({
       manifest: {
         name: 'AsadARG',
         short_name: 'AsadARG',
-        description: 'A comer, hijo de puta!',
+        description: 'Subsecretaría Nacional de Coordinación Asadera — Delegación Pilar',
         theme_color: '#236391',
         background_color: '#f9f9ff',
         display: 'standalone',
