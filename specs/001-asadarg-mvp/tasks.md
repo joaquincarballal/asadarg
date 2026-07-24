@@ -76,10 +76,14 @@ shell de la app)
       `contracts/close-event-rpc.md` (depende de T008)
 - [x] T012 [P] Crear bucket de Storage `fotos-eventos` + políticas RLS en
       `supabase/migrations/0004_storage.sql` según `contracts/storage.md`
-- [ ] T013 [P] Habilitar y configurar el provider de Google en Supabase Auth (dashboard/
-      config del proyecto Supabase) — **pendiente**: requiere crear el proyecto Supabase
-      real y credenciales OAuth de Google Cloud (cuenta del usuario). `supabase/config.toml`
-      ya deja `[auth.external.google]` armado para leer `GOOGLE_CLIENT_ID`/`SECRET` por env.
+- [x] T013 [P] Habilitar y configurar el provider de Google en Supabase Auth (dashboard/
+      config del proyecto Supabase) — proyecto Supabase real creado (`paefmmctrnxkyxdmhjap`),
+      cliente OAuth "AsadARG" creado en Google Cloud (tipo Web application) con el redirect
+      URI `https://paefmmctrnxkyxdmhjap.supabase.co/auth/v1/callback` registrado, y Client
+      ID/Secret cargados y habilitados en Supabase Dashboard → Authentication → Providers →
+      Google. Client ID/Secret guardados en `Notes.md` (gitignored). Nota: el OAuth consent
+      screen sigue en modo "Testing" — hay que agregar a cada amigo como test user en Google
+      Cloud, o publicar la app, antes de que puedan loguearse.
 - [x] T014 [P] Implementar cliente Supabase en `web/src/lib/supabase.ts`
 - [x] T015 [P] Implementar `web/src/lib/dolarapi.ts` (fetch blue + MEP, manejo de fallo
       según `contracts/dolarapi.md`)
@@ -225,13 +229,33 @@ el acumulado histórico y el ranking.
       cada 3 días en `worker/wrangler.toml` (`research.md` §2) — validado con
       `wrangler deploy --dry-run` (sin necesitar login)
 - [x] T043 [P] Revisión de seguridad RLS end-to-end — ver nota debajo
-- [ ] T044 Deploy de `web/` a Cloudflare Pages (`wrangler pages deploy`) y de `worker/`
-      (`wrangler deploy`) — **pendiente**: requiere `wrangler login` con la cuenta de
-      Cloudflare del usuario; el build de producción ya corre limpio (`npm run build`)
-- [ ] T045 Correr la validación manual completa de `quickstart.md` (Historias 1, 2 y 3) —
-      **parcial**: automatizado verificado (`npm run test` 10/10, `npm run build` OK,
-      `npx oxlint` sin warnings); el recorrido manual click-por-click requiere un proyecto
-      Supabase real (T013) + deploy (T044)
+- [x] T044 Deploy de `web/` a Cloudflare Pages (`wrangler pages deploy`) y de `worker/`
+      (`wrangler deploy`) — proyecto Pages `asadarg` creado, deploy en
+      https://asadarg.pages.dev; Worker `asadarg-keepalive` deployado con secrets
+      `SUPABASE_URL`/`SUPABASE_ANON_KEY` y cron `0 12 */3 * *`. `supabase config push`
+      aplicó `additional_redirect_urls = ["https://asadarg.pages.dev"]` al proyecto real
+      (con fix: el primer push pisó `client_id` de Google con el placeholder sin resolver
+      `env(GOOGLE_CLIENT_ID)` por no tener esa env var seteada — se corrigió re-pusheando
+      con `GOOGLE_CLIENT_ID`/`GOOGLE_CLIENT_SECRET` en el entorno).
+- [x] T045 Correr la validación manual completa de `quickstart.md` (Historias 1, 2 y 3) —
+      hecho contra la app real (https://asadarg.pages.dev) vía browser automation con la
+      sesión Google real del usuario: login, crear evento, cargar gasto de Carne (USD vía
+      dolarapi OK), ver Balance, cerrar evento (settlements OK, caso 1 participante), ver
+      Stats del evento. Evento de prueba borrado al final.
+
+      **2 bugs reales encontrados y corregidos en producción durante esta validación**
+      (no eran errores de configuración — el código/migraciones tenían el problema):
+      1. A las tablas de negocio les faltaba el `GRANT` de Postgres al rol `authenticated`
+         (las RLS policies existían pero sin el GRANT de tabla, Postgres devuelve
+         "permission denied" antes de evaluar RLS). Fix: `0005_grants.sql`.
+      2. Crear un evento hace `INSERT ... RETURNING` (PostgREST
+         `Prefer: return=representation`), que evalúa la policy de SELECT sobre la fila
+         recién insertada — pero el trigger `evento_add_creator` (AFTER INSERT) que suma
+         al creador como participante corre después, así que `is_participant(id)` daba
+         false en ese instante y el insert fallaba con "new row violates row-level
+         security policy" pese a que el WITH CHECK del insert era correcto. Fix:
+         `0006_fix_evento_select_on_create.sql` (agrega `creado_por = auth.uid()` como
+         alternativa en la policy de SELECT).
 
 **Nota de seguridad (T043)**: revisión manual de `0002_rls.sql`/`0004_storage.sql` — RLS
 habilitado en las 9 tablas de negocio; `is_participant()`/`evento_is_open()` como

@@ -14,6 +14,7 @@ dist/
 
 # Supabase local dev
 .supabase/
+supabase/.temp/
 
 # OS
 .DS_Store
@@ -23,3 +24,6 @@ dist/
 
 # Claude Code local-only state
 .claude/settings.local.json
+
+# Notas locales con credenciales (nunca commitear)
+Notes.md
