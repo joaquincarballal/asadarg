@@ -1,5 +1,6 @@
 import { supabase } from './supabase';
 import type { Perfil } from '../types';
+import { calcularAsistencia } from './asistencia';
 
 export interface StatsEvento {
   kgTotales: number;
@@ -60,38 +61,24 @@ export async function obtenerStatsHistoricas(): Promise<StatsHistoricas> {
   };
 }
 
-export interface AsistenciaParticipante {
-  participante: Perfil;
-  porcentaje: number;
-}
+export { calcularAsistencia } from './asistencia';
+export type { AsistenciaParticipante } from './asistencia';
 
-/** % de asistencia por usuario: asados asistidos / asados totales del grupo (FR-023). */
-export async function obtenerAsistencia(): Promise<AsistenciaParticipante[]> {
+/** % de asistencia por usuario (FR-023) — trae los datos crudos de Supabase y
+ * delega el cálculo a calcularAsistencia (testeada en asistencia.test.ts). */
+export async function obtenerAsistencia() {
   const { data: eventos, error: eventosError } = await supabase.from('evento').select('id');
   if (eventosError) throw eventosError;
-  const totalEventos = eventos?.length ?? 0;
-  if (totalEventos === 0) return [];
 
   const { data, error } = await supabase
     .from('evento_participante')
     .select('participante_id, perfil(*)');
   if (error) throw error;
 
-  const conteos = new Map<string, { perfil: Perfil; count: number }>();
-  for (const row of (data ?? []) as unknown as { perfil: Perfil }[]) {
-    const p = row.perfil;
-    if (!p) continue;
-    const entry = conteos.get(p.id) ?? { perfil: p, count: 0 };
-    entry.count += 1;
-    conteos.set(p.id, entry);
-  }
-
-  return Array.from(conteos.values())
-    .map(({ perfil, count }) => ({
-      participante: perfil,
-      porcentaje: (count / totalEventos) * 100,
-    }))
-    .sort((a, b) => b.porcentaje - a.porcentaje);
+  return calcularAsistencia(
+    (data ?? []) as unknown as { perfil: Perfil | null }[],
+    eventos?.length ?? 0,
+  );
 }
 
 export interface RankingAsador {
