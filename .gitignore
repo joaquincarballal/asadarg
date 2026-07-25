@@ -25,5 +25,8 @@ supabase/.temp/
 # Claude Code local-only state
 .claude/settings.local.json
 
+# Progress ledger scratch (subagent-driven-development)
+.superpowers/
+
 # Notas locales con credenciales (nunca commitear)
 Notes.md
