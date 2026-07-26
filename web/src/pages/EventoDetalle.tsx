@@ -24,7 +24,7 @@ type Tab = 'gastos' | 'balance' | 'stats';
 export function EventoDetalle() {
   const { id } = useParams<{ id: string }>();
   const navigate = useNavigate();
-  const { user } = useAuth();
+  const { user, loading: authLoading } = useAuth();
   const [evento, setEvento] = useState<Evento | null>(null);
   const [participantes, setParticipantes] = useState<Perfil[]>([]);
   const [gastos, setGastos] = useState<Gasto[]>([]);
@@ -48,8 +48,9 @@ export function EventoDetalle() {
   }, [id, user, navigate]);
 
   useEffect(() => {
+    if (authLoading) return;
     cargar();
-  }, [cargar]);
+  }, [cargar, authLoading]);
 
   if (!id || !evento) {
     return (
