@@ -1,10 +1,11 @@
 import { useCallback, useEffect, useState } from 'react';
-import { useParams } from 'react-router-dom';
+import { useNavigate, useParams } from 'react-router-dom';
 import { Layout } from '../components/Layout';
 import { AsadorTitularSelect } from '../components/AsadorTitularSelect';
 import { FotosEvento } from '../components/FotosEvento';
 import { FormGasto } from '../components/FormGasto';
 import { GastoItem } from '../components/GastoItem';
+import { ParticipantesSection } from '../components/ParticipantesSection';
 import { Balances } from './Balances';
 import { Settlements } from './Settlements';
 import { EstadisticasEvento } from './EstadisticasEvento';
@@ -15,12 +16,15 @@ import {
   obtenerEvento,
 } from '../lib/eventoService';
 import { listarGastos } from '../lib/gastoService';
+import { useAuth } from '../lib/useAuth';
 import type { Evento, Gasto, Perfil } from '../types';
 
 type Tab = 'gastos' | 'balance' | 'stats';
 
 export function EventoDetalle() {
   const { id } = useParams<{ id: string }>();
+  const navigate = useNavigate();
+  const { user } = useAuth();
   const [evento, setEvento] = useState<Evento | null>(null);
   const [participantes, setParticipantes] = useState<Perfil[]>([]);
   const [gastos, setGastos] = useState<Gasto[]>([]);
@@ -34,10 +38,14 @@ export function EventoDetalle() {
       listarParticipantes(id),
       listarGastos(id),
     ]);
+    if (user && !parts.some((p) => p.id === user.id)) {
+      navigate(`/eventos/${id}/unirse`, { replace: true });
+      return;
+    }
     setEvento(ev);
     setParticipantes(parts);
     setGastos(gs as Gasto[]);
-  }, [id]);
+  }, [id, user, navigate]);
 
   useEffect(() => {
     cargar();
@@ -97,6 +105,12 @@ export function EventoDetalle() {
 
       <div className="mb-lg flex flex-col gap-lg">
         <FotosEvento eventoId={id} />
+        <ParticipantesSection
+          eventoId={id}
+          participantes={participantes}
+          abierto={abierto}
+          onCambio={cargar}
+        />
         <AsadorTitularSelect
           eventoId={id}
           participantes={participantes}
