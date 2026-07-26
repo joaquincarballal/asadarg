@@ -22,7 +22,7 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
     if (!agregando) return;
     listarTestersDisponibles(eventoId)
       .then(setTesters)
-      .catch((err) => setError(err instanceof Error ? err.message : 'No se pudieron cargar los testers.'));
+      .catch((err) => setError(err instanceof Error ? err.message : 'No se pudo cargar la gente que ya usa la app.'));
   }, [agregando, eventoId]);
 
   useEffect(() => {
