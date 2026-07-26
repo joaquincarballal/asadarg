@@ -16,16 +16,21 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
   const [guardando, setGuardando] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
+  const buttonRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!agregando) return;
-    listarTestersDisponibles(eventoId).then(setTesters);
+    listarTestersDisponibles(eventoId)
+      .then(setTesters)
+      .catch((err) => setError(err instanceof Error ? err.message : 'No se pudieron cargar los testers.'));
   }, [agregando, eventoId]);
 
   useEffect(() => {
     if (!agregando) return;
     function handleClickFuera(e: MouseEvent) {
-      if (panelRef.current && !panelRef.current.contains(e.target as Node)) {
+      const isClickOnPanel = panelRef.current && panelRef.current.contains(e.target as Node);
+      const isClickOnButton = buttonRef.current && buttonRef.current.contains(e.target as Node);
+      if (!isClickOnPanel && !isClickOnButton) {
         setAgregando(false);
       }
     }
@@ -65,6 +70,7 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
         <h2 className="font-display font-bold text-on-surface">Participantes</h2>
         {abierto && (
           <button
+            ref={buttonRef}
             type="button"
             onClick={() => setAgregando((v) => !v)}
             className="text-sm font-semibold text-primary"
@@ -103,7 +109,7 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
         >
           {testers.length > 0 && (
             <div className="flex flex-col gap-1">
-              <p className="text-xs font-semibold text-on-surface-variant">Testers ya registrados</p>
+              <p className="text-xs font-semibold text-on-surface-variant">Gente que ya usa la app</p>
               {testers.map((t) => (
                 <button
                   key={t.id}
