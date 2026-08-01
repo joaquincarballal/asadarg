@@ -47,7 +47,7 @@ export interface StatsHistoricas {
 export async function obtenerStatsHistoricas(): Promise<StatsHistoricas> {
   const [gastosRes, eventosRes] = await Promise.all([
     supabase.from('gasto').select('monto_ars, monto_usd, kilogramos'),
-    supabase.from('evento').select('id'),
+    supabase.from('evento').select('id, evento_participante!inner()'),
   ]);
   if (gastosRes.error) throw gastosRes.error;
   if (eventosRes.error) throw eventosRes.error;
@@ -67,7 +67,9 @@ export type { AsistenciaParticipante } from './asistencia';
 /** % de asistencia por usuario (FR-023) — trae los datos crudos de Supabase y
  * delega el cálculo a calcularAsistencia (testeada en asistencia.test.ts). */
 export async function obtenerAsistencia() {
-  const { data: eventos, error: eventosError } = await supabase.from('evento').select('id');
+  const { data: eventos, error: eventosError } = await supabase
+    .from('evento')
+    .select('id, evento_participante!inner()');
   if (eventosError) throw eventosError;
 
   const { data, error } = await supabase
@@ -90,7 +92,7 @@ export interface RankingAsador {
 export async function obtenerRankingAsadores(): Promise<RankingAsador[]> {
   const { data, error } = await supabase
     .from('evento')
-    .select('asador_titular_id, perfil:asador_titular_id(*)')
+    .select('asador_titular_id, perfil:asador_titular_id(*), evento_participante!inner()')
     .not('asador_titular_id', 'is', null);
   if (error) throw error;
 
