@@ -44,6 +44,7 @@ export function AsadorTitularSelect({ eventoId, participantes, asadorTitularId, 
             >
               <Avatar
                 perfil={p}
+                activo={activo}
                 circleClassName={`border-2 transition-all ${
                   activo
                     ? 'border-secondary-container bg-secondary-container/20 text-on-secondary-container'

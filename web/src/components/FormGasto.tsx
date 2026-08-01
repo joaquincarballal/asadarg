@@ -227,6 +227,7 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
             >
               <Avatar
                 perfil={p}
+                activo={pagadorId === p.id}
                 circleClassName={`border-2 ${
                   pagadorId === p.id
                     ? 'border-secondary-container'
