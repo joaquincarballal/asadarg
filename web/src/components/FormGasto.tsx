@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'react';
 import type { CategoriaGasto, CorteCarne, ConceptoExtraSugerido, Perfil } from '../types';
+import { Avatar } from './Avatar';
 import { calcularDivision } from '../lib/splitting';
+import { primerNombre } from '../lib/perfil';
 import {
   agregarCorteCarne,
   crearGasto,
@@ -223,16 +225,15 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
               onClick={() => setPagadorId(p.id)}
               className="flex shrink-0 flex-col items-center gap-1"
             >
-              <div
-                className={`flex h-14 w-14 items-center justify-center rounded-full border-2 text-lg font-bold ${
+              <Avatar
+                perfil={p}
+                circleClassName={`border-2 ${
                   pagadorId === p.id
                     ? 'border-secondary-container'
                     : 'border-transparent bg-surface-container-high text-on-surface-variant'
                 }`}
-              >
-                {p.nombre?.[0] ?? '?'}
-              </div>
-              <span className="max-w-[64px] truncate text-xs">{p.nombre ?? 'Sin nombre'}</span>
+              />
+              <span className="max-w-[64px] truncate text-xs">{primerNombre(p.nombre)}</span>
             </button>
           ))}
         </div>

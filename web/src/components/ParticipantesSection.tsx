@@ -1,6 +1,8 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Perfil } from '../types';
+import { Avatar } from './Avatar';
 import { agregarInvitado, agregarParticipanteExistente, listarTestersDisponibles } from '../lib/eventoService';
+import { primerNombre } from '../lib/perfil';
 
 interface Props {
   eventoId: string;
@@ -83,19 +85,9 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
       <div className="hide-scrollbar flex gap-3 overflow-x-auto pb-1">
         {participantes.map((p) => (
           <div key={p.id} className="flex shrink-0 flex-col items-center gap-1">
-            <div className="flex h-14 w-14 items-center justify-center rounded-full bg-surface-container-high text-lg font-bold text-on-surface-variant">
-              {p.avatar_url ? (
-                <img
-                  src={p.avatar_url}
-                  alt={p.nombre ?? ''}
-                  className="h-full w-full rounded-full object-cover"
-                />
-              ) : (
-                (p.nombre?.[0] ?? '?')
-              )}
-            </div>
+            <Avatar perfil={p} circleClassName="bg-surface-container-high text-on-surface-variant" />
             <span className="max-w-[64px] truncate text-xs text-on-surface-variant">
-              {p.nombre ?? 'Sin nombre'}
+              {primerNombre(p.nombre)}
             </span>
             {p.es_invitado && <span className="text-[10px] text-on-surface-variant">Invitado</span>}
           </div>
