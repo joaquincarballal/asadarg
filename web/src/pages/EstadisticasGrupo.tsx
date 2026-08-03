@@ -31,19 +31,29 @@ export function EstadisticasGrupo() {
     <Layout title="Estadísticas del Grupo">
       <p className="mb-lg text-on-surface-variant">Los números no mienten, papá.</p>
 
-      <section className="mb-lg rounded-2xl bg-gradient-to-br from-secondary-container/20 to-primary-container/20 p-5 text-center shadow-sm">
-        <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
-          Total gastado histórico
-        </p>
-        <p className="mt-1 font-display text-3xl font-bold text-on-surface">
-          ${formatoArs.format(stats?.gastoTotalArs ?? 0)} ARS
-        </p>
-        <p className="mt-1 rounded-full bg-white/60 px-3 py-1 text-sm text-on-surface-variant inline-block">
-          (u$s {formatoArs.format(stats?.gastoTotalUsd ?? 0)})
-        </p>
-        <p className="mt-3 text-xs text-on-surface-variant">
-          {stats?.kgTotales ?? 0} kg de carne · {stats?.cantidadAsados ?? 0} asados
-        </p>
+      <section className="relative mb-lg overflow-hidden rounded-2xl p-5 text-center shadow-sm">
+        <div
+          aria-hidden
+          className="absolute inset-0 opacity-40"
+          style={{
+            background:
+              'linear-gradient(to bottom, var(--color-primary-container) 0%, var(--color-primary-container) 33%, var(--color-background) 33%, var(--color-background) 67%, var(--color-primary-container) 67%, var(--color-primary-container) 100%)',
+          }}
+        />
+        <div className="relative">
+          <p className="text-xs font-semibold uppercase tracking-wide text-on-surface-variant">
+            Total gastado histórico
+          </p>
+          <p className="mt-1 font-display text-3xl font-bold text-on-surface">
+            ${formatoArs.format(stats?.gastoTotalArs ?? 0)} ARS
+          </p>
+          <p className="mt-1 rounded-full bg-white/60 px-3 py-1 text-sm text-on-surface-variant inline-block">
+            (u$s {formatoArs.format(stats?.gastoTotalUsd ?? 0)})
+          </p>
+          <p className="mt-3 text-xs text-on-surface-variant">
+            {stats?.kgTotales ?? 0} kg de carne · {stats?.cantidadAsados ?? 0} asados
+          </p>
+        </div>
       </section>
 
       <h2 className="mb-sm font-display text-lg font-bold text-on-surface">Asistencia</h2>

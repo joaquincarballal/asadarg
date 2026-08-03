@@ -21,7 +21,7 @@ export function GastoItem({ gasto, perfiles, eventoAbierto, onCambio }: Props) {
   const icono = gasto.categoria === 'carne' ? 'restaurant_menu' : 'shopping_basket';
   const titulo =
     gasto.categoria === 'carne'
-      ? `${gasto.kilogramos ?? '?'}kg de carne`
+      ? `${gasto.kilogramos ?? '?'}kg de ${gasto.corte_carne?.nombre ?? 'carne'}`
       : (gasto.concepto ?? 'Extra');
 
   async function guardar() {
@@ -47,21 +47,31 @@ export function GastoItem({ gasto, perfiles, eventoAbierto, onCambio }: Props) {
     return (
       <div className="flex flex-col gap-2 rounded-2xl bg-white p-4 shadow-sm">
         {gasto.categoria === 'carne' && (
+          <div className="flex flex-col gap-1">
+            <label className="pl-2 text-xs font-semibold text-on-surface-variant">
+              Cantidad (kg)
+            </label>
+            <input
+              type="number"
+              value={kilos}
+              onChange={(e) => setKilos(e.target.value)}
+              placeholder="Kilos"
+              className="rounded-xl border border-outline-variant px-3 py-2"
+            />
+          </div>
+        )}
+        <div className="flex flex-col gap-1">
+          <label className="pl-2 text-xs font-semibold text-on-surface-variant">
+            Precio total ($)
+          </label>
           <input
             type="number"
-            value={kilos}
-            onChange={(e) => setKilos(e.target.value)}
-            placeholder="Kilos"
+            value={monto}
+            onChange={(e) => setMonto(e.target.value)}
+            placeholder="Monto ARS"
             className="rounded-xl border border-outline-variant px-3 py-2"
           />
-        )}
-        <input
-          type="number"
-          value={monto}
-          onChange={(e) => setMonto(e.target.value)}
-          placeholder="Monto ARS"
-          className="rounded-xl border border-outline-variant px-3 py-2"
-        />
+        </div>
         <div className="flex gap-2">
           <button
             onClick={guardar}

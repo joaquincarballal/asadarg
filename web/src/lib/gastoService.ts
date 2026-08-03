@@ -62,7 +62,7 @@ export async function crearGasto(input: CrearGastoInput) {
 export async function listarGastos(eventoId: string) {
   const { data, error } = await supabase
     .from('gasto')
-    .select('*')
+    .select('*, corte_carne(nombre)')
     .eq('evento_id', eventoId)
     .order('created_at', { ascending: false });
   if (error) throw error;
@@ -113,19 +113,22 @@ export async function listarCortesCarne() {
   return data ?? [];
 }
 
-export async function listarConceptosSugeridos() {
-  const { data, error } = await supabase
-    .from('concepto_extra_sugerido')
-    .select('*')
-    .order('nombre');
-  if (error) throw error;
-  return data ?? [];
-}
-
 export async function agregarCorteCarne(nombre: string) {
   const { data, error } = await supabase.from('corte_carne').insert({ nombre }).select().single();
   if (error) throw error;
   return data;
+}
+
+/** Borra un corte del catálogo compartido. Falla si ya se usó en algún gasto
+ * (constraint de FK en `gasto.corte_id`, sin ON DELETE) — se traduce el error acá. */
+export async function borrarCorteCarne(id: string) {
+  const { error } = await supabase.from('corte_carne').delete().eq('id', id);
+  if (error) {
+    if (error.code === '23503') {
+      throw new Error('Ese corte ya se usó en algún gasto, no se puede borrar.');
+    }
+    throw error;
+  }
 }
 
 /** Balance en vivo (pagado - corresponde) por participante — mismo cálculo que usa

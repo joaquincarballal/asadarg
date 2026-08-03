@@ -1,12 +1,7 @@
-import { useEffect, useState } from 'react';
-import type { CategoriaGasto, CorteCarne, ConceptoExtraSugerido, Perfil } from '../types';
+import { useEffect, useRef, useState } from 'react';
+import type { CategoriaGasto, CorteCarne, Perfil } from '../types';
 import { calcularDivision } from '../lib/splitting';
-import {
-  agregarCorteCarne,
-  crearGasto,
-  listarConceptosSugeridos,
-  listarCortesCarne,
-} from '../lib/gastoService';
+import { agregarCorteCarne, borrarCorteCarne, crearGasto, listarCortesCarne } from '../lib/gastoService';
 
 interface Props {
   eventoId: string;
@@ -17,10 +12,13 @@ interface Props {
 export function FormGasto({ eventoId, participantes, onCreado }: Props) {
   const [categoria, setCategoria] = useState<CategoriaGasto>('carne');
   const [cortes, setCortes] = useState<CorteCarne[]>([]);
-  const [conceptos, setConceptos] = useState<ConceptoExtraSugerido[]>([]);
 
   const [corteId, setCorteId] = useState('');
   const [nuevoCorte, setNuevoCorte] = useState('');
+  const [gestionarCortes, setGestionarCortes] = useState(false);
+  const [errorCorteId, setErrorCorteId] = useState<string | null>(null);
+  const [errorCorteMsg, setErrorCorteMsg] = useState<string | null>(null);
+  const gestionRef = useRef<HTMLDivElement>(null);
   const [kilogramos, setKilogramos] = useState('');
   const [concepto, setConcepto] = useState('');
   const [montoArs, setMontoArs] = useState('');
@@ -36,7 +34,6 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
       setCortes(data as CorteCarne[]);
       if (data.length > 0) setCorteId(data[0].id);
     });
-    listarConceptosSugeridos().then((data) => setConceptos(data as ConceptoExtraSugerido[]));
   }, []);
 
   function toggleIncluido(id: string) {
@@ -55,6 +52,33 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
     setCorteId((corte as CorteCarne).id);
     setNuevoCorte('');
   }
+
+  async function handleBorrarCorte(id: string) {
+    setErrorCorteId(null);
+    setErrorCorteMsg(null);
+    try {
+      await borrarCorteCarne(id);
+      setCortes((prev) => {
+        const next = prev.filter((c) => c.id !== id);
+        if (corteId === id) setCorteId(next[0]?.id ?? '');
+        return next;
+      });
+    } catch (err) {
+      setErrorCorteId(id);
+      setErrorCorteMsg(err instanceof Error ? err.message : 'No se pudo borrar el corte.');
+    }
+  }
+
+  useEffect(() => {
+    if (!gestionarCortes) return;
+    function handleClickFuera(e: MouseEvent) {
+      if (gestionRef.current && !gestionRef.current.contains(e.target as Node)) {
+        setGestionarCortes(false);
+      }
+    }
+    document.addEventListener('mousedown', handleClickFuera);
+    return () => document.removeEventListener('mousedown', handleClickFuera);
+  }, [gestionarCortes]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -165,7 +189,39 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
               >
                 + Agregar
               </button>
+              <button
+                type="button"
+                onClick={() => setGestionarCortes((v) => !v)}
+                className="rounded-xl px-3 py-2 text-sm font-semibold text-error"
+              >
+                {gestionarCortes ? 'Listo' : '- Sacar'}
+              </button>
             </div>
+            {gestionarCortes && (
+              <div
+                ref={gestionRef}
+                className="flex flex-col gap-1 rounded-xl border border-outline-variant bg-white p-2"
+              >
+                {cortes.map((c) => (
+                  <div key={c.id} className="flex flex-col gap-0.5">
+                    <div className="flex items-center justify-between rounded-lg px-2 py-1.5 text-sm text-on-surface">
+                      {c.nombre}
+                      <button
+                        type="button"
+                        onClick={() => handleBorrarCorte(c.id)}
+                        aria-label={`Borrar ${c.nombre}`}
+                        className="material-symbols-outlined text-error"
+                      >
+                        delete
+                      </button>
+                    </div>
+                    {errorCorteId === c.id && (
+                      <p className="px-2 text-xs text-error">{errorCorteMsg}</p>
+                    )}
+                  </div>
+                ))}
+              </div>
+            )}
           </div>
           <div className="flex flex-col gap-xs">
             <label className="pl-2 text-sm font-semibold text-on-surface-variant">
@@ -184,17 +240,11 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
         <div className="flex flex-col gap-xs">
           <label className="pl-2 text-sm font-semibold text-on-surface-variant">Concepto</label>
           <input
-            list="conceptos-sugeridos"
             value={concepto}
             onChange={(e) => setConcepto(e.target.value)}
             placeholder="Carbón, hielo, bebidas..."
             className="rounded-2xl border border-outline-variant bg-white px-4 py-3 text-lg text-on-surface shadow-sm"
           />
-          <datalist id="conceptos-sugeridos">
-            {conceptos.map((c) => (
-              <option key={c.id} value={c.nombre} />
-            ))}
-          </datalist>
         </div>
       )}
 

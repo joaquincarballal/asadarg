@@ -41,13 +41,23 @@ export function Inicio() {
       </p>
 
       <div className="mb-lg grid grid-cols-3 gap-2">
-        <StatTile icon="set_meal" label="Carne Total" valor={`${stats?.kgTotales ?? 0} kg`} />
+        <StatTile
+          icon="set_meal"
+          label="Carne Total"
+          valor={`${stats?.kgTotales ?? 0} kg`}
+          accent
+        />
         <StatTile
           icon="payments"
           label="Gastados"
           valor={`$${formatoArs.format(stats?.gastoTotalArs ?? 0)}`}
         />
-        <StatTile icon="outdoor_grill" label="Asados" valor={String(stats?.cantidadAsados ?? 0)} />
+        <StatTile
+          icon="outdoor_grill"
+          label="Asados"
+          valor={String(stats?.cantidadAsados ?? 0)}
+          accent
+        />
       </div>
 
       <div className="mb-lg flex items-center justify-between">
@@ -79,12 +89,38 @@ export function Inicio() {
   );
 }
 
-function StatTile({ icon, label, valor }: { icon: string; label: string; valor: string }) {
+function StatTile({
+  icon,
+  label,
+  valor,
+  accent = false,
+}: {
+  icon: string;
+  label: string;
+  valor: string;
+  accent?: boolean;
+}) {
   return (
-    <div className="flex flex-col items-center gap-1 rounded-2xl bg-white p-3 text-center shadow-sm">
-      <span className="material-symbols-outlined text-primary">{icon}</span>
-      <p className="font-display text-sm font-bold text-on-surface">{valor}</p>
-      <p className="text-[10px] text-on-surface-variant">{label}</p>
+    <div
+      className={`flex flex-col items-center gap-1 rounded-2xl p-3 text-center shadow-sm ${
+        accent ? 'bg-primary-container/25' : 'bg-white'
+      }`}
+    >
+      <span
+        className={`material-symbols-outlined ${accent ? 'text-on-primary-container' : 'text-primary'}`}
+      >
+        {icon}
+      </span>
+      <p
+        className={`font-display text-sm font-bold ${accent ? 'text-on-primary-container' : 'text-on-surface'}`}
+      >
+        {valor}
+      </p>
+      <p
+        className={`text-[10px] ${accent ? 'text-on-primary-container/80' : 'text-on-surface-variant'}`}
+      >
+        {label}
+      </p>
     </div>
   );
 }

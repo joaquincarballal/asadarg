@@ -62,6 +62,7 @@ export interface Gasto {
   cargado_por_id: string;
   created_at: string;
   updated_at: string;
+  corte_carne?: { nombre: string } | null;
 }
 
 export interface GastoParticipante {
