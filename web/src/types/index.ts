@@ -41,11 +41,6 @@ export interface CorteCarne {
   created_at: string;
 }
 
-export interface ConceptoExtraSugerido {
-  id: string;
-  nombre: string;
-}
-
 export type CategoriaGasto = 'carne' | 'extra';
 
 export interface Gasto {
