@@ -11,11 +11,17 @@ export function EstadisticasEvento({
   cantidadParticipantes: number;
 }) {
   const [stats, setStats] = useState<StatsEvento | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    obtenerStatsEvento(eventoId, cantidadParticipantes).then(setStats);
+    obtenerStatsEvento(eventoId, cantidadParticipantes)
+      .then(setStats)
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : 'No se pudieron calcular las stats.'),
+      );
   }, [eventoId, cantidadParticipantes]);
 
+  if (error) return <p className="text-error">{error}</p>;
   if (!stats) return <p className="text-on-surface-variant">Calculando...</p>;
 
   const items = [

@@ -32,10 +32,14 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
   const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    listarCortesCarne().then((data) => {
-      setCortes(data as CorteCarne[]);
-      if (data.length > 0) setCorteId(data[0].id);
-    });
+    listarCortesCarne()
+      .then((data) => {
+        setCortes(data as CorteCarne[]);
+        if (data.length > 0) setCorteId(data[0].id);
+      })
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : 'No se pudieron cargar los cortes.'),
+      );
   }, []);
 
   function toggleIncluido(id: string) {

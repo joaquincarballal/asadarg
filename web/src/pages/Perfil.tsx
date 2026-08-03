@@ -7,6 +7,7 @@ import type { Perfil as PerfilType } from '../types';
 export function Perfil() {
   const { user } = useAuth();
   const [perfil, setPerfil] = useState<PerfilType | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -15,12 +16,19 @@ export function Perfil() {
       .select('*')
       .eq('id', user.id)
       .single()
-      .then(({ data }) => setPerfil(data as PerfilType | null));
+      .then(({ data, error: fetchError }) => {
+        if (fetchError) {
+          setError(fetchError.message);
+          return;
+        }
+        setPerfil(data as PerfilType | null);
+      });
   }, [user]);
 
   return (
     <Layout title="Perfil">
       <div className="flex flex-col items-center gap-md py-lg text-center">
+        {error && <p className="text-error">{error}</p>}
         {perfil?.avatar_url ? (
           <img
             src={perfil.avatar_url}

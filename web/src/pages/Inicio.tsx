@@ -17,6 +17,7 @@ export function Inicio() {
   const [perfil, setPerfil] = useState<Perfil | null>(null);
   const [eventos, setEventos] = useState<Evento[]>([]);
   const [stats, setStats] = useState<StatsHistoricas | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     if (!user) return;
@@ -26,8 +27,16 @@ export function Inicio() {
       .eq('id', user.id)
       .single()
       .then(({ data }) => setPerfil(data));
-    listarMisEventos().then((data) => setEventos(data.slice(0, 3)));
-    obtenerStatsHistoricas().then(setStats);
+    listarMisEventos()
+      .then((data) => setEventos(data.slice(0, 3)))
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : 'No se pudieron cargar tus asados.'),
+      );
+    obtenerStatsHistoricas()
+      .then(setStats)
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : 'No se pudieron cargar las estadísticas.'),
+      );
   }, [user]);
 
   return (
@@ -39,6 +48,8 @@ export function Inicio() {
           Prepará el fuego, que el finde promete.
         </span>
       </p>
+
+      {error && <p className="mb-lg text-sm text-error">{error}</p>}
 
       <div className="mb-lg grid grid-cols-3 gap-2">
         <StatTile

@@ -13,13 +13,22 @@ export function Balances({
   participantes: Perfil[];
 }) {
   const [balances, setBalances] = useState<Balance[] | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
     calcularBalancesEvento(
       eventoId,
       participantes.map((p) => p.id),
-    ).then(setBalances);
+    )
+      .then(setBalances)
+      .catch((err) =>
+        setError(err instanceof Error ? err.message : 'No se pudo calcular el balance.'),
+      );
   }, [eventoId, participantes]);
+
+  if (error) {
+    return <p className="text-error">{error}</p>;
+  }
 
   if (!balances) {
     return <p className="text-on-surface-variant">Calculando...</p>;

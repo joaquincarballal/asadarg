@@ -19,17 +19,21 @@ export function EstadisticasGrupo() {
   const [asistencia, setAsistencia] = useState<AsistenciaParticipante[]>([]);
   const [ranking, setRanking] = useState<RankingAsador[]>([]);
   const [tendencia, setTendencia] = useState<PuntoPrecioMensual[]>([]);
+  const [error, setError] = useState<string | null>(null);
 
   useEffect(() => {
-    obtenerStatsHistoricas().then(setStats);
-    obtenerAsistencia().then(setAsistencia);
-    obtenerRankingAsadores().then(setRanking);
-    obtenerTendenciaPrecioKg().then(setTendencia);
+    const onError = (err: unknown) =>
+      setError(err instanceof Error ? err.message : 'No se pudieron cargar las estadísticas.');
+    obtenerStatsHistoricas().then(setStats).catch(onError);
+    obtenerAsistencia().then(setAsistencia).catch(onError);
+    obtenerRankingAsadores().then(setRanking).catch(onError);
+    obtenerTendenciaPrecioKg().then(setTendencia).catch(onError);
   }, []);
 
   return (
     <Layout title="Estadísticas del Grupo">
       <p className="mb-lg text-on-surface-variant">Los números no mienten, papá.</p>
+      {error && <p className="mb-lg text-sm text-error">{error}</p>}
 
       <section className="relative mb-lg overflow-hidden rounded-2xl p-5 text-center shadow-sm">
         <div

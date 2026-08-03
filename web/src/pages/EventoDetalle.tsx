@@ -30,27 +30,40 @@ export function EventoDetalle() {
   const [gastos, setGastos] = useState<Gasto[]>([]);
   const [tab, setTab] = useState<Tab>('gastos');
   const [cerrando, setCerrando] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
   const cargar = useCallback(async () => {
     if (!id) return;
-    const [ev, parts, gs] = await Promise.all([
-      obtenerEvento(id),
-      listarParticipantes(id),
-      listarGastos(id),
-    ]);
-    if (user && !parts.some((p) => p.id === user.id)) {
-      navigate(`/eventos/${id}/unirse`, { replace: true });
-      return;
+    try {
+      const [ev, parts, gs] = await Promise.all([
+        obtenerEvento(id),
+        listarParticipantes(id),
+        listarGastos(id),
+      ]);
+      if (user && !parts.some((p) => p.id === user.id)) {
+        navigate(`/eventos/${id}/unirse`, { replace: true });
+        return;
+      }
+      setEvento(ev);
+      setParticipantes(parts);
+      setGastos(gs as Gasto[]);
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo cargar el evento.');
     }
-    setEvento(ev);
-    setParticipantes(parts);
-    setGastos(gs as Gasto[]);
   }, [id, user, navigate]);
 
   useEffect(() => {
     if (authLoading) return;
     cargar();
   }, [cargar, authLoading]);
+
+  if (error) {
+    return (
+      <Layout>
+        <p className="text-error">{error}</p>
+      </Layout>
+    );
+  }
 
   if (!id || !evento) {
     return (
