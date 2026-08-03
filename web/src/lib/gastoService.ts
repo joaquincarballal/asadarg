@@ -16,7 +16,10 @@ export interface CrearGastoInput {
 }
 
 /** Guarda un gasto capturando la cotización USD del día (FR-012) y el precio/kg si es
- * carne (FR-013). Si dolarapi.com no responde, el gasto se guarda igual (FR-020). */
+ * carne (FR-013). Si dolarapi.com no responde, el gasto se guarda igual (FR-020).
+ * El insert de `gasto` + `gasto_participante` corre atómico en el RPC `crear_gasto`
+ * (supabase/migrations/0010_crear_gasto_rpc.sql) — antes eran 2 requests separados y un
+ * fallo en el segundo dejaba un gasto sin división, con balances mentirosos. */
 export async function crearGasto(input: CrearGastoInput) {
   const { data: userData } = await supabase.auth.getUser();
   const cargadoPorId = userData.user?.id;
@@ -29,33 +32,27 @@ export async function crearGasto(input: CrearGastoInput) {
     input.categoria === 'carne' && input.kilogramos ? input.montoArs / input.kilogramos : null;
 
   const { data: gasto, error } = await supabase
-    .from('gasto')
-    .insert({
-      evento_id: input.eventoId,
-      categoria: input.categoria,
-      corte_id: input.corteId ?? null,
-      kilogramos: input.kilogramos ?? null,
-      concepto: input.concepto ?? null,
-      monto_ars: input.montoArs,
-      cotizacion_usd_venta: cotizacionVenta,
-      monto_usd: montoUsd,
-      precio_por_kg: precioPorKg,
-      pagador_id: input.pagadorId,
-      cargado_por_id: cargadoPorId,
+    .rpc('crear_gasto', {
+      p_evento_id: input.eventoId,
+      p_categoria: input.categoria,
+      p_corte_id: input.corteId ?? null,
+      p_kilogramos: input.kilogramos ?? null,
+      p_concepto: input.concepto ?? null,
+      p_monto_ars: input.montoArs,
+      p_cotizacion_usd_venta: cotizacionVenta,
+      p_monto_usd: montoUsd,
+      p_precio_por_kg: precioPorKg,
+      p_pagador_id: input.pagadorId,
+      p_cargado_por_id: cargadoPorId,
+      p_division: input.division.map((d) => ({
+        participanteId: d.participanteId,
+        proporcion: d.proporcion,
+      })),
     })
     .select()
     .single();
 
   if (error) throw error;
-
-  const filas = input.division.map((d) => ({
-    gasto_id: gasto.id,
-    participante_id: d.participanteId,
-    proporcion: d.proporcion,
-  }));
-  const { error: divisionError } = await supabase.from('gasto_participante').insert(filas);
-  if (divisionError) throw divisionError;
-
   return gasto;
 }
 
