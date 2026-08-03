@@ -1,6 +1,8 @@
 import { useState } from 'react';
 import type { Perfil } from '../types';
+import { Avatar } from './Avatar';
 import { asignarAsadorTitular } from '../lib/eventoService';
+import { primerNombre } from '../lib/perfil';
 
 interface Props {
   eventoId: string;
@@ -40,25 +42,17 @@ export function AsadorTitularSelect({ eventoId, participantes, asadorTitularId, 
               onClick={() => seleccionar(activo ? null : p.id)}
               className="flex shrink-0 flex-col items-center gap-1"
             >
-              <div
-                className={`flex h-14 w-14 items-center justify-center rounded-full border-2 text-lg font-bold transition-all ${
+              <Avatar
+                perfil={p}
+                activo={activo}
+                circleClassName={`border-2 transition-all ${
                   activo
                     ? 'border-secondary-container bg-secondary-container/20 text-on-secondary-container'
                     : 'border-transparent bg-surface-container-high text-on-surface-variant'
                 }`}
-              >
-                {p.avatar_url ? (
-                  <img
-                    src={p.avatar_url}
-                    alt={p.nombre ?? ''}
-                    className="h-full w-full rounded-full object-cover"
-                  />
-                ) : (
-                  (p.nombre?.[0] ?? '?')
-                )}
-              </div>
+              />
               <span className="max-w-[64px] truncate text-xs text-on-surface-variant">
-                {p.nombre ?? 'Sin nombre'}
+                {primerNombre(p.nombre)}
               </span>
             </button>
           );

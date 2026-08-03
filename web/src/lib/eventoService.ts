@@ -38,6 +38,20 @@ export async function obtenerEvento(eventoId: string): Promise<Evento> {
   return data as Evento;
 }
 
+/** Preview mínimo de un evento para la pantalla de "confirmar asistencia" — se
+ * puede leer aunque todavía no seas participante (RLS de evento_select). */
+export async function obtenerEventoPreview(
+  eventoId: string,
+): Promise<Pick<Evento, 'id' | 'nombre' | 'fecha'>> {
+  const { data, error } = await supabase
+    .from('evento')
+    .select('id, nombre, fecha')
+    .eq('id', eventoId)
+    .single();
+  if (error) throw error;
+  return data;
+}
+
 export async function listarMisEventos(): Promise<Evento[]> {
   const { data, error } = await supabase
     .from('evento')
@@ -54,6 +68,52 @@ export async function listarParticipantes(eventoId: string): Promise<Perfil[]> {
     .eq('evento_id', eventoId);
   if (error) throw error;
   return (data ?? []).flatMap((row) => (row as unknown as { perfil: Perfil }).perfil);
+}
+
+/** Testers ya registrados (con cuenta real) que todavía no están en este evento —
+ * para el buscador de "+ Agregar gente". */
+export async function listarTestersDisponibles(eventoId: string): Promise<Perfil[]> {
+  const [{ data: todos, error: todosError }, yaEnEvento] = await Promise.all([
+    supabase.from('perfil').select('*').eq('es_invitado', false),
+    listarParticipantes(eventoId),
+  ]);
+  if (todosError) throw todosError;
+
+  const idsEnEvento = new Set(yaEnEvento.map((p) => p.id));
+  return (todos ?? []).filter((p) => !idsEnEvento.has(p.id));
+}
+
+/** Suma a un tester ya registrado (proxy-add) — queda confirmado al toque, sin
+ * que esa persona tenga que hacer nada. Requiere que quien llama ya sea
+ * participante del evento (lo garantiza la RLS de evento_participante_insert). */
+export async function agregarParticipanteExistente(
+  eventoId: string,
+  participanteId: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from('evento_participante')
+    .upsert(
+      { evento_id: eventoId, participante_id: participanteId },
+      { onConflict: 'evento_id,participante_id' },
+    );
+  if (error) throw error;
+}
+
+/** Carga un invitado externo sin cuenta (solo nombre) y lo suma al evento. */
+export async function agregarInvitado(eventoId: string, nombre: string): Promise<Perfil> {
+  const { data: perfil, error: perfilError } = await supabase
+    .from('perfil')
+    .insert({ nombre, es_invitado: true })
+    .select()
+    .single();
+  if (perfilError) throw perfilError;
+
+  const { error: participanteError } = await supabase
+    .from('evento_participante')
+    .insert({ evento_id: eventoId, participante_id: perfil.id });
+  if (participanteError) throw participanteError;
+
+  return perfil as Perfil;
 }
 
 export async function asignarAsadorTitular(eventoId: string, participanteId: string | null) {

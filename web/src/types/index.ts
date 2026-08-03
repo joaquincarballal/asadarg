@@ -5,6 +5,7 @@ export interface Perfil {
   nombre: string | null;
   avatar_url: string | null;
   created_at: string;
+  es_invitado: boolean;
 }
 
 export type EstadoEvento = 'abierto' | 'cerrado';
