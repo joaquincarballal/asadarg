@@ -17,9 +17,17 @@ port = 54323
 
 [auth]
 enabled = true
-site_url = "http://localhost:5173"
-# TODO: reemplazar por el dominio real de Cloudflare Pages una vez deployado.
-additional_redirect_urls = ["https://asadarg.pages.dev"]
+site_url = "https://asadarg.pages.dev"
+# Los "/**" habilitan redirectTo a rutas internas (ej. /eventos/:id/unirse) después del
+# login con Google — si no, GoTrue solo permite la raíz exacta y el signInWithOAuth con
+# redirectTo a una subruta cae de nuevo a site_url, perdiendo el deep link de invitación.
+# El wildcard de subdominio cubre además las preview deployments de Cloudflare Pages
+# (*.asadarg.pages.dev, tanto los alias de branch como las URLs con hash de cada deploy).
+additional_redirect_urls = [
+  "https://asadarg.pages.dev/**",
+  "https://*.asadarg.pages.dev/**",
+  "http://localhost:5173/**",
+]
 jwt_expiry = 3600
 enable_signup = true
 

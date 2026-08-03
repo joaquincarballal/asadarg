@@ -11,10 +11,12 @@ if (!supabaseUrl || !supabaseAnonKey) {
 
 export const supabase = createClient(supabaseUrl, supabaseAnonKey);
 
-export async function loginConGoogle() {
+/** `redirectPath` preserva el destino original (ej. `/eventos/:id/unirse` desde un link
+ * de invitación) — sin esto, GoTrue siempre vuelve al origin y se pierde el deep link. */
+export async function loginConGoogle(redirectPath = '/') {
   const { error } = await supabase.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin },
+    options: { redirectTo: `${window.location.origin}${redirectPath}` },
   });
   if (error) throw error;
 }
