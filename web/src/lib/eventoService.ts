@@ -116,6 +116,28 @@ export async function agregarInvitado(eventoId: string, nombre: string): Promise
   return perfil as Perfil;
 }
 
+/** Saca a un participante del evento — cualquier participante puede sacar a
+ * cualquier otro, incluso a sí mismo. La base bloquea el borrado si esa persona
+ * ya tiene gastos asociados al evento (evento_participante_guard_delete, ver
+ * supabase/migrations/0012_evento_participante_delete.sql) para no dejar
+ * balances fantasma; ese error se traduce acá a un mensaje amigable. */
+export async function quitarParticipante(
+  eventoId: string,
+  participanteId: string,
+): Promise<void> {
+  const { error } = await supabase
+    .from('evento_participante')
+    .delete()
+    .eq('evento_id', eventoId)
+    .eq('participante_id', participanteId);
+  if (error) {
+    if (error.code === 'P0001') {
+      throw new Error('No se puede sacar a alguien que ya tiene gastos asociados a este evento.');
+    }
+    throw error;
+  }
+}
+
 export async function asignarAsadorTitular(eventoId: string, participanteId: string | null) {
   const { error } = await supabase
     .from('evento')

@@ -1,7 +1,12 @@
 import { useEffect, useRef, useState } from 'react';
 import type { Perfil } from '../types';
 import { Avatar } from './Avatar';
-import { agregarInvitado, agregarParticipanteExistente, listarTestersDisponibles } from '../lib/eventoService';
+import {
+  agregarInvitado,
+  agregarParticipanteExistente,
+  listarTestersDisponibles,
+  quitarParticipante,
+} from '../lib/eventoService';
 import { primerNombre } from '../lib/perfil';
 
 interface Props {
@@ -16,6 +21,7 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
   const [testers, setTesters] = useState<Perfil[]>([]);
   const [nombreInvitado, setNombreInvitado] = useState('');
   const [guardando, setGuardando] = useState(false);
+  const [quitandoId, setQuitandoId] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const panelRef = useRef<HTMLDivElement>(null);
   const buttonRef = useRef<HTMLButtonElement>(null);
@@ -48,6 +54,20 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
       onCambio();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo agregar.');
+    }
+  }
+
+  async function handleQuitar(p: Perfil) {
+    if (!confirm(`¿Sacar a ${p.nombre ?? 'esta persona'} del evento?`)) return;
+    setError(null);
+    setQuitandoId(p.id);
+    try {
+      await quitarParticipante(eventoId, p.id);
+      onCambio();
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo sacar al participante.');
+    } finally {
+      setQuitandoId(null);
     }
   }
 
@@ -84,8 +104,19 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
 
       <div className="hide-scrollbar flex gap-3 overflow-x-auto pb-1">
         {participantes.map((p) => (
-          <div key={p.id} className="flex shrink-0 flex-col items-center gap-1">
+          <div key={p.id} className="relative flex shrink-0 flex-col items-center gap-1">
             <Avatar perfil={p} circleClassName="bg-surface-container-high text-on-surface-variant" />
+            {abierto && (
+              <button
+                type="button"
+                onClick={() => handleQuitar(p)}
+                disabled={quitandoId === p.id}
+                aria-label={`Sacar a ${primerNombre(p.nombre)}`}
+                className="absolute -right-1 -top-1 flex h-5 w-5 items-center justify-center rounded-full bg-surface-container-highest text-on-surface-variant ring-2 ring-white disabled:opacity-60"
+              >
+                <span className="material-symbols-outlined text-[14px]">close</span>
+              </button>
+            )}
             <span className="max-w-[64px] truncate text-xs text-on-surface-variant">
               {primerNombre(p.nombre)}
             </span>
@@ -93,6 +124,8 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
           </div>
         ))}
       </div>
+
+      {error && <p className="text-xs text-error">{error}</p>}
 
       {agregando && (
         <div
@@ -134,7 +167,6 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
               </button>
             </div>
           </div>
-          {error && <p className="text-xs text-error">{error}</p>}
         </div>
       )}
     </div>
