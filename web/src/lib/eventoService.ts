@@ -61,6 +61,18 @@ export async function listarMisEventos(): Promise<Evento[]> {
   return data as Evento[];
 }
 
+/** Todos los asados del grupo, participes o no — para poder sumarse a uno del
+ * que todavía no formás parte (evento_select ya es público para cualquier
+ * autenticado, ver 0008_invitados.sql). */
+export async function listarTodosLosEventos(): Promise<Evento[]> {
+  const { data, error } = await supabase
+    .from('evento')
+    .select('*')
+    .order('fecha', { ascending: false });
+  if (error) throw error;
+  return data as Evento[];
+}
+
 export async function listarParticipantes(eventoId: string): Promise<Perfil[]> {
   const { data, error } = await supabase
     .from('evento_participante')

@@ -136,7 +136,13 @@ function StatTile({
   );
 }
 
-export function EventoCard({ evento }: { evento: Evento }) {
+export function EventoCard({
+  evento,
+  esParticipante = true,
+}: {
+  evento: Evento;
+  esParticipante?: boolean;
+}) {
   return (
     <Link
       to={`/eventos/${evento.id}`}
@@ -155,7 +161,13 @@ export function EventoCard({ evento }: { evento: Evento }) {
           })}
         </p>
       </div>
-      <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+      {esParticipante ? (
+        <span className="material-symbols-outlined text-on-surface-variant">chevron_right</span>
+      ) : (
+        <span className="rounded-full bg-secondary-container px-3 py-1 text-xs font-bold text-on-secondary-container">
+          Unirme
+        </span>
+      )}
     </Link>
   );
 }
