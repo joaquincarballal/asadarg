@@ -50,7 +50,7 @@ export function Settlements({
             </span>
             <div className="flex-1">
               <p className="text-on-surface">
-                <strong>{de}</strong> le paga a <strong>{a}</strong>
+                <strong>{de}</strong> le debe a <strong>{a}</strong>
               </p>
               <p className="font-display font-bold text-primary">
                 ${formatoArs.format(s.monto_ars)}
