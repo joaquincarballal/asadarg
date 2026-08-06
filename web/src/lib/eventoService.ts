@@ -129,10 +129,12 @@ export async function agregarInvitado(eventoId: string, nombre: string): Promise
 }
 
 /** Saca a un participante del evento — cualquier participante puede sacar a
- * cualquier otro, incluso a sí mismo. La base bloquea el borrado si esa persona
- * ya tiene gastos asociados al evento (evento_participante_guard_delete, ver
- * supabase/migrations/0012_evento_participante_delete.sql) para no dejar
- * balances fantasma; ese error se traduce acá a un mensaje amigable. */
+ * cualquier otro, incluso a sí mismo. Si esa persona pagó algún gasto del evento
+ * la base bloquea el borrado (ese dinero se le debe igual); si solo estaba en la
+ * división de gastos ajenos, se la saca y esos gastos se redistribuyen entre los
+ * que quedan (evento_participante_guard_delete, ver
+ * supabase/migrations/0014_quitar_participante_redistribuye_division.sql). Los
+ * mensajes de bloqueo ya vienen amigables desde el trigger. */
 export async function quitarParticipante(
   eventoId: string,
   participanteId: string,
@@ -144,7 +146,7 @@ export async function quitarParticipante(
     .eq('participante_id', participanteId);
   if (error) {
     if (error.code === 'P0001') {
-      throw new Error('No se puede sacar a alguien que ya tiene gastos asociados a este evento.');
+      throw new Error(error.message);
     }
     throw error;
   }
