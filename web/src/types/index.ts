@@ -56,6 +56,7 @@ export interface Gasto {
   precio_por_kg: number | null;
   pagador_id: string;
   cargado_por_id: string;
+  division_manual: boolean;
   created_at: string;
   updated_at: string;
   corte_carne?: { nombre: string } | null;

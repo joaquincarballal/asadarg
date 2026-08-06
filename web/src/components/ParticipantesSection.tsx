@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from 'react';
+import { useNavigate } from 'react-router-dom';
 import type { Perfil } from '../types';
 import { Avatar } from './Avatar';
 import {
@@ -8,6 +9,7 @@ import {
   quitarParticipante,
 } from '../lib/eventoService';
 import { primerNombre } from '../lib/perfil';
+import { useAuth } from '../lib/useAuth';
 
 interface Props {
   eventoId: string;
@@ -17,6 +19,8 @@ interface Props {
 }
 
 export function ParticipantesSection({ eventoId, participantes, abierto, onCambio }: Props) {
+  const { user } = useAuth();
+  const navigate = useNavigate();
   const [agregando, setAgregando] = useState(false);
   const [testers, setTesters] = useState<Perfil[]>([]);
   const [nombreInvitado, setNombreInvitado] = useState('');
@@ -51,6 +55,7 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
     try {
       await agregarParticipanteExistente(eventoId, participanteId);
       setTesters((prev) => prev.filter((t) => t.id !== participanteId));
+      setAgregando(false);
       onCambio();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo agregar.');
@@ -63,6 +68,10 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
     setQuitandoId(p.id);
     try {
       await quitarParticipante(eventoId, p.id);
+      if (p.id === user?.id) {
+        navigate('/asados', { replace: true });
+        return;
+      }
       onCambio();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo sacar al participante.');
@@ -78,6 +87,7 @@ export function ParticipantesSection({ eventoId, participantes, abierto, onCambi
     try {
       await agregarInvitado(eventoId, nombreInvitado.trim());
       setNombreInvitado('');
+      setAgregando(false);
       onCambio();
     } catch (err) {
       setError(err instanceof Error ? err.message : 'No se pudo agregar el invitado.');

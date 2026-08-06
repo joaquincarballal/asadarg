@@ -11,6 +11,7 @@ import { Settlements } from './Settlements';
 import { EstadisticasEvento } from './EstadisticasEvento';
 import {
   cerrarEvento,
+  eliminarEvento,
   invitacionUrl,
   listarParticipantes,
   obtenerEvento,
@@ -30,6 +31,7 @@ export function EventoDetalle() {
   const [gastos, setGastos] = useState<Gasto[]>([]);
   const [tab, setTab] = useState<Tab>('gastos');
   const [cerrando, setCerrando] = useState(false);
+  const [eliminando, setEliminando] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
   const cargar = useCallback(async () => {
@@ -92,6 +94,18 @@ export function EventoDetalle() {
       setTab('balance');
     } finally {
       setCerrando(false);
+    }
+  }
+
+  async function handleEliminar() {
+    if (!confirm('¿Eliminar este evento? Esta acción no se puede deshacer.')) return;
+    setEliminando(true);
+    try {
+      await eliminarEvento(id!);
+      navigate('/asados', { replace: true });
+    } catch (err) {
+      setError(err instanceof Error ? err.message : 'No se pudo eliminar el evento.');
+      setEliminando(false);
     }
   }
 
@@ -167,6 +181,7 @@ export function EventoDetalle() {
                     key={g.id}
                     gasto={g}
                     perfiles={perfilesPorId}
+                    participantes={participantes}
                     eventoAbierto={abierto}
                     onCambio={cargar}
                   />
@@ -186,6 +201,7 @@ export function EventoDetalle() {
                     key={g.id}
                     gasto={g}
                     perfiles={perfilesPorId}
+                    participantes={participantes}
                     eventoAbierto={abierto}
                     onCambio={cargar}
                   />
@@ -217,6 +233,19 @@ export function EventoDetalle() {
 
       {tab === 'stats' && (
         <EstadisticasEvento eventoId={id} cantidadParticipantes={participantes.length} />
+      )}
+
+      {user?.id === evento.creado_por && (
+        <div className="mt-xl flex justify-center">
+          <button
+            type="button"
+            onClick={handleEliminar}
+            disabled={eliminando}
+            className="text-sm font-semibold text-error disabled:opacity-60"
+          >
+            {eliminando ? 'Eliminando...' : 'Eliminar evento'}
+          </button>
+        </div>
       )}
     </Layout>
   );

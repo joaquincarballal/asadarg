@@ -51,7 +51,7 @@ export function EstadisticasGrupo() {
           <p className="mt-1 font-display text-3xl font-bold text-on-surface">
             ${formatoArs.format(stats?.gastoTotalArs ?? 0)} ARS
           </p>
-          <p className="mt-1 rounded-full bg-white/60 px-3 py-1 text-sm text-on-surface-variant inline-block">
+          <p className="mt-1 text-sm text-on-surface-variant">
             (u$s {formatoArs.format(stats?.gastoTotalUsd ?? 0)})
           </p>
           <p className="mt-3 text-xs text-on-surface-variant">

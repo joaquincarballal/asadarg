@@ -13,6 +13,10 @@ export interface CrearGastoInput {
   montoArs: number;
   pagadorId: string;
   division: DivisionParticipante[];
+  /** true si la división excluye a alguien de los participantes actuales del
+   * evento — el gasto queda fijo y deja de autoajustarse cuando se suma gente
+   * nueva (ver supabase/migrations/0015_division_dinamica.sql). */
+  divisionManual: boolean;
 }
 
 /** Guarda un gasto capturando la cotización USD del día (FR-012) y el precio/kg si es
@@ -48,6 +52,7 @@ export async function crearGasto(input: CrearGastoInput) {
         participanteId: d.participanteId,
         proporcion: d.proporcion,
       })),
+      p_division_manual: input.divisionManual,
     })
     .select()
     .single();
@@ -101,6 +106,30 @@ export async function actualizarGasto(
 
 export async function eliminarGasto(gastoId: string) {
   const { error } = await supabase.from('gasto').delete().eq('id', gastoId);
+  if (error) throw error;
+}
+
+/** Quiénes están hoy en la división de un gasto puntual (para editarla a mano). */
+export async function listarDivisionGasto(gastoId: string): Promise<string[]> {
+  const { data, error } = await supabase
+    .from('gasto_participante')
+    .select('participante_id')
+    .eq('gasto_id', gastoId);
+  if (error) throw error;
+  return (data ?? []).map((row) => row.participante_id);
+}
+
+/** Edita a mano entre quiénes se divide un gasto puntual (ej. sacar a alguien
+ * que no tomó vino) sin sacarlo del evento. Deja el gasto fijo: ya no se
+ * autoajusta cuando se suma gente nueva (0015_division_dinamica.sql). */
+export async function actualizarDivisionGasto(
+  gastoId: string,
+  participanteIds: string[],
+): Promise<void> {
+  const { error } = await supabase.rpc('actualizar_division_gasto', {
+    p_gasto_id: gastoId,
+    p_participante_ids: participanteIds,
+  });
   if (error) throw error;
 }
 

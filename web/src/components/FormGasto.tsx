@@ -118,6 +118,8 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
               .map((p) => ({ participanteId: p.id, proporcion: 1 }))
           : undefined,
       );
+      // Si queda alguien afuera, la división pasa a ser fija (0015_division_dinamica.sql).
+      const divisionManual = division.length !== participantes.length;
 
       await crearGasto({
         eventoId,
@@ -128,6 +130,7 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
         montoArs: monto,
         pagadorId,
         division,
+        divisionManual,
       });
 
       setMontoArs('');
@@ -148,7 +151,7 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
           type="button"
           onClick={() => setCategoria('carne')}
           className={`flex-1 rounded-full py-2 text-sm font-bold transition-colors ${
-            categoria === 'carne' ? 'text-primary' : 'text-on-surface-variant'
+            categoria === 'carne' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant'
           }`}
         >
           Carne / Achuras
@@ -157,7 +160,7 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
           type="button"
           onClick={() => setCategoria('extra')}
           className={`flex-1 rounded-full py-2 text-sm font-bold transition-colors ${
-            categoria === 'extra' ? 'text-primary' : 'text-on-surface-variant'
+            categoria === 'extra' ? 'bg-white text-primary shadow-sm' : 'text-on-surface-variant'
           }`}
         >
           Extras / Bebidas
@@ -332,7 +335,7 @@ export function FormGasto({ eventoId, participantes, onCreado }: Props) {
         className="flex items-center justify-center gap-2 rounded-xl bg-secondary-container py-4 font-display text-sm font-bold uppercase tracking-widest text-on-secondary-container shadow-[0px_8px_24px_rgba(116,172,223,0.25)] transition-transform active:scale-95 disabled:opacity-60"
       >
         <span className="material-symbols-outlined icon-fill">add_circle</span>
-        {guardando ? 'Sumando...' : 'Sumar al pozo'}
+        {guardando ? 'Sumando...' : 'Sumar gasto'}
       </button>
     </form>
   );

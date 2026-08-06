@@ -160,6 +160,14 @@ export async function asignarAsadorTitular(eventoId: string, participanteId: str
   if (error) throw error;
 }
 
+/** Borra el evento entero (ej. un asado que nunca se hizo). Solo el creador
+ * puede (evento_delete RLS, ver 0016_eliminar_evento.sql). Las tablas hijas se
+ * limpian solas por on delete cascade. */
+export async function eliminarEvento(eventoId: string): Promise<void> {
+  const { error } = await supabase.from('evento').delete().eq('id', eventoId);
+  if (error) throw error;
+}
+
 export function invitacionUrl(eventoId: string): string {
   return `${window.location.origin}/eventos/${eventoId}/unirse`;
 }

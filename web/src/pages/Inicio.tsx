@@ -91,7 +91,7 @@ export function Inicio() {
 
       <Link
         to="/eventos/nuevo"
-        className="fixed bottom-[calc(4.5rem+env(safe-area-inset-bottom))] left-1/2 flex w-[calc(100%-40px)] max-w-[440px] -translate-x-1/2 items-center justify-center gap-2 rounded-full bg-secondary-container py-4 font-display text-sm font-bold uppercase tracking-widest text-on-secondary-container shadow-[0px_8px_24px_rgba(116,172,223,0.25)]"
+        className="fixed bottom-[calc(5.5rem+env(safe-area-inset-bottom))] left-1/2 flex w-[calc(100%-40px)] max-w-[440px] -translate-x-1/2 items-center justify-center gap-2 rounded-full bg-secondary-container py-4 font-display text-sm font-bold uppercase tracking-widest text-on-secondary-container shadow-[0px_8px_24px_rgba(116,172,223,0.25)]"
       >
         <span className="material-symbols-outlined icon-fill">add</span>
         Nuevo Asado
