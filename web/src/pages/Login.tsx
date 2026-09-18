@@ -14,9 +14,9 @@ export function Login() {
 
   return (
     <div className="flex min-h-dvh flex-col items-center justify-center gap-lg bg-background px-container-padding text-center">
-      <img src="/icon-192.png" alt="Asadometro" className="h-24 w-24 rounded-2xl shadow-sm" />
+      <img src="/icon-192.png" alt="Asadómetro" className="h-24 w-24 rounded-2xl shadow-sm" />
       <div>
-        <h1 className="font-display text-3xl font-bold text-primary">Asadometro</h1>
+        <h1 className="font-display text-3xl font-bold text-primary">Asadómetro</h1>
         <p className="mt-2 text-on-surface-variant">
           Subsecretaría Nacional
           <br />
