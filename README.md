@@ -1,4 +1,4 @@
-# Asadarg 🔥
+# Asadómetro 🔥
 
 App para contabilizar y repartir los gastos de los asados entre un grupo de amigos —
 estilo Tricount, con temática de asado argentino.
