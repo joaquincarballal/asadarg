@@ -12,8 +12,8 @@ export default defineConfig({
       registerType: 'autoUpdate',
       includeAssets: ['apple-touch-icon.png'],
       manifest: {
-        name: 'AsadARG',
-        short_name: 'AsadARG',
+        name: 'Asadometro',
+        short_name: 'Asadometro',
         description: 'Subsecretaría Nacional de Coordinación Asadera — Delegación Pilar',
         theme_color: '#236391',
         background_color: '#f9f9ff',

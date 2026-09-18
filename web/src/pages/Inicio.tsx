@@ -40,7 +40,7 @@ export function Inicio() {
   }, [user]);
 
   return (
-    <Layout title="AsadARG">
+    <Layout title="Asadometro">
       <p className="mb-lg font-display text-2xl font-bold text-on-surface">
         ¡Hola, {perfil?.nombre?.split(' ')[0] ?? 'che'}! 🔥
         <br />
