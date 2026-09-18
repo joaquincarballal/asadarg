@@ -47,7 +47,7 @@ export interface StatsHistoricas {
 export async function obtenerStatsHistoricas(): Promise<StatsHistoricas> {
   const [gastosRes, eventosRes] = await Promise.all([
     supabase.from('gasto').select('monto_ars, monto_usd, kilogramos'),
-    supabase.from('evento').select('id, evento_participante!inner()'),
+    supabase.from('evento').select('id', { count: 'exact', head: true }),
   ]);
   if (gastosRes.error) throw gastosRes.error;
   if (eventosRes.error) throw eventosRes.error;
@@ -57,7 +57,7 @@ export async function obtenerStatsHistoricas(): Promise<StatsHistoricas> {
     kgTotales: gastos.reduce((acc, g) => acc + (g.kilogramos ?? 0), 0),
     gastoTotalArs: gastos.reduce((acc, g) => acc + g.monto_ars, 0),
     gastoTotalUsd: gastos.reduce((acc, g) => acc + (g.monto_usd ?? 0), 0),
-    cantidadAsados: eventosRes.data?.length ?? 0,
+    cantidadAsados: eventosRes.count ?? 0,
   };
 }
 
@@ -65,22 +65,21 @@ export { calcularAsistencia } from './asistencia';
 export type { AsistenciaParticipante } from './asistencia';
 
 /** % de asistencia por usuario (FR-023) — trae los datos crudos de Supabase y
- * delega el cálculo a calcularAsistencia (testeada en asistencia.test.ts). */
+ * delega el cálculo a calcularAsistencia (testeada en asistencia.test.ts).
+ * Las participaciones cross-usuario vienen de stats_participaciones(), una RPC
+ * security definer: evento_participante_select ya no es público (ver
+ * 0017_cerrar_evento_participante_publico.sql), así que no hay otra forma de
+ * saber cuántos asados asistió cada OTRO participante. La RPC devuelve perfil
+ * sin evento_id — alcanza para contar, no para saber a cuáles fue. */
 export async function obtenerAsistencia() {
-  const { data: eventos, error: eventosError } = await supabase
-    .from('evento')
-    .select('id, evento_participante!inner()');
+  const [{ count: totalEventos, error: eventosError }, { data, error }] = await Promise.all([
+    supabase.from('evento').select('id', { count: 'exact', head: true }),
+    supabase.rpc('stats_participaciones'),
+  ]);
   if (eventosError) throw eventosError;
-
-  const { data, error } = await supabase
-    .from('evento_participante')
-    .select('participante_id, perfil(*)');
   if (error) throw error;
 
-  return calcularAsistencia(
-    (data ?? []) as unknown as { perfil: Perfil | null }[],
-    eventos?.length ?? 0,
-  );
+  return calcularAsistencia((data ?? []) as unknown as { perfil: Perfil | null }[], totalEventos ?? 0);
 }
 
 export interface RankingAsador {
@@ -92,7 +91,7 @@ export interface RankingAsador {
 export async function obtenerRankingAsadores(): Promise<RankingAsador[]> {
   const { data, error } = await supabase
     .from('evento')
-    .select('asador_titular_id, perfil:asador_titular_id(*), evento_participante!inner()')
+    .select('asador_titular_id, perfil:asador_titular_id(*)')
     .not('asador_titular_id', 'is', null);
   if (error) throw error;
 
